@@ -6,21 +6,12 @@ using Vintagestory.API.Util;
 
 namespace ElectricalProgressive.Content.Block.EMotor;
 
-public class BlockEntityEMotor : BlockEntityEBase
+public class BlockEntityEMotor : BlockEntityEFacingBase
 {
-    private Facing _facing = Facing.None;
-    public Facing Facing
+    protected override Facing GetConnection(Facing value)
     {
-        get => this._facing;
-        set
-        {
-            if (value != this._facing)
-            {
-                this.ElectricalProgressive.Connection = FacingHelper.FullFace(this._facing = value);
-            }
-        }
+        return FacingHelper.FullFace(value);
     }
-    public const string FacingKey = "electricalprogressive:facing";
 
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
