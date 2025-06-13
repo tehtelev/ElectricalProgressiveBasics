@@ -1,9 +1,13 @@
 ﻿using ElectricalProgressive.Content.Block;
 using ElectricalProgressive.Content.Block.EGenerator;
+using ElectricalProgressive.Content.Block.EMotor;
 using ElectricalProgressive.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.GameContent.Mechanics;
 
@@ -16,10 +20,18 @@ public class BlockETermoGenerator : BlockEBase
     {
         return true;
     }
-    
 
 
 
+    /// <summary>
+    /// Проверка возможности установки блока
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="byPlayer"></param>
+    /// <param name="itemstack"></param>
+    /// <param name="blockSel"></param>
+    /// <param name="failureCode"></param>
+    /// <returns></returns>
     public override bool TryPlaceBlock(IWorldAccessor world, IPlayer byPlayer, ItemStack itemstack,
        BlockSelection blockSel, ref string failureCode)
     {
@@ -91,7 +103,7 @@ public class BlockETermoGenerator : BlockEBase
                 new(voltage, maxCurrent, "", 0, 1, 1, false, isolated, isolatedEnvironment),
                 FacingHelper.Faces(facing).First().Index);
 
-               
+
             return true;
         }
 
@@ -100,7 +112,12 @@ public class BlockETermoGenerator : BlockEBase
 
 
 
-
+    /// <summary>
+    /// Обработчик изменения соседнего блока
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="pos"></param>
+    /// <param name="neibpos"></param>
     public override void OnNeighbourBlockChange(IWorldAccessor world, BlockPos pos, BlockPos neibpos)
     {
         base.OnNeighbourBlockChange(world, pos, neibpos);
@@ -112,7 +129,7 @@ public class BlockETermoGenerator : BlockEBase
             faces != null &&
             faces.Any() &&
             faces.First() is { } blockFacing &&
-            !world.BlockAccessor.GetBlock(pos.AddCopy(blockFacing)).SideSolid[blockFacing.Opposite.Index])
+            !world.BlockAccessor.GetBlock(pos.AddCopy(blockFacing)).SideSolid[blockFacing.Opposite.Index]) //если блок под ним перестал быть сплошным
             {
                 world.BlockAccessor.BreakBlock(pos, null);
             }
@@ -127,5 +144,74 @@ public class BlockETermoGenerator : BlockEBase
         float dropQuantityMultiplier = 1)
     {
         return new[] { OnPickBlock(world, pos) };
+    }
+
+
+    private static void AddMeshData(ref MeshData? sourceMesh, MeshData? meshData)
+    {
+        if (meshData != null)
+        {
+            if (sourceMesh != null)
+            {
+                sourceMesh.AddMeshData(meshData);
+            }
+            else
+            {
+                sourceMesh = meshData;
+            }
+        }
+    }
+
+
+
+
+
+    public override void OnJsonTesselation(ref MeshData sourceMesh, ref int[] lightRgbsByCorner, BlockPos pos,
+    Vintagestory.API.Common.Block[] chunkExtBlocks, int extIndex3d)
+    {
+        base.OnJsonTesselation(ref sourceMesh, ref lightRgbsByCorner, pos, chunkExtBlocks, extIndex3d);
+
+        if (this.api is ICoreClientAPI clientApi &&
+            this.api.World.BlockAccessor.GetBlockEntity(pos) is BlockEntityETermoGenerator entity &&
+            entity.Facing != Facing.None
+           )
+        {
+            var stack = entity.Inventory[0].Itemstack;
+
+            if (stack != null && stack.Collectible.CombustibleProps != null)
+            {
+                // смотрим сколько топлива в генераторе
+                int size = (int)(stack.StackSize*8.0F / stack.Collectible.MaxStackSize);
+
+                MeshData myMesh;
+                clientApi.Tesselator.TesselateShape(this, Vintagestory.API.Common.Shape.TryGet(api, "electricalprogressivebasics:shapes/block/termogenerator/toplivo/toplivo-"+ size+".json"), out myMesh);
+
+                clientApi.TesselatorManager.ThreadDispose(); //обязательно?
+
+                AddMeshData(ref sourceMesh, myMesh);
+            }
+
+
+        }
+    }
+
+
+
+
+
+
+    /// <summary>
+    /// Получение информации о предмете в инвентаре
+    /// </summary>
+    /// <param name="inSlot"></param>
+    /// <param name="dsc"></param>
+    /// <param name="world"></param>
+    /// <param name="withDebugInfo"></param>
+    public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
+    {
+        base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
+        dsc.AppendLine(Lang.Get("Voltage") + ": " + MyMiniLib.GetAttributeInt(inSlot.Itemstack.Block, "voltage", 0) + " " + Lang.Get("V"));
+        dsc.AppendLine(Lang.Get("Consumption") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "maxConsumption", 0) + " " + Lang.Get("W"));
+        dsc.AppendLine(Lang.Get("WResistance") + ": " + ((MyMiniLib.GetAttributeBool(inSlot.Itemstack.Block, "isolatedEnvironment", false)) ? Lang.Get("Yes") : Lang.Get("No")));
     }
 }

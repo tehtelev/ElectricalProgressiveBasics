@@ -23,11 +23,12 @@ public class BlockTermoplastini : BlockEBase
         BlockSelection blockSel, ref string failureCode)
     {
         //проверка блок под блоком, на который мы ставим
+        //должно ставиться нагенератор или термопластины
         var block = world.BlockAccessor.GetBlock(blockSel.Position.AddCopy(BlockFacing.DOWN));        
         if (block is not BlockETermoGenerator && block is not BlockTermoplastini)
             return false;
 
-
+        // 11й блок не должен быть термопластиной
         var dawn10Pos = blockSel.Position.DownCopy(10);
         block = world.BlockAccessor.GetBlock(dawn10Pos);
         if (block is BlockTermoplastini)
@@ -48,10 +49,8 @@ public class BlockTermoplastini : BlockEBase
     {
         base.OnNeighbourBlockChange(world, pos, neibpos);
 
-
+        // если блок под термопластиной не термогенератор и не термопластина, то ломаем
         var block = world.BlockAccessor.GetBlock(pos.AddCopy(BlockFacing.DOWN));
-
-
         if (block is not BlockETermoGenerator && block is not BlockTermoplastini)
             world.BlockAccessor.BreakBlock(pos, null);
 

@@ -48,7 +48,7 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
             if (hasBurnout)
                 ParticleManager.SpawnBlackSmoke(Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
 
-
+            /*
             if (hasBurnout && entity.Block.Variant["type"] != "burned")
             {
                 var type = "type";
@@ -56,9 +56,10 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
 
                 Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant(type, variant)).BlockId, Pos);
             }
+            */
         }
 
-        Blockentity.MarkDirty(true);
+        //Blockentity.MarkDirty(true); //обновлять здесь уже лишнее
     }
 
 
@@ -119,6 +120,11 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
     }
 
 
+
+    /// <summary>
+    /// Сохранение параметров в дерево атрибутов
+    /// </summary>
+    /// <param name="tree"></param>
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
@@ -126,6 +132,12 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
         tree.SetFloat(PowerGiveKey, PowerGive);
     }
 
+
+    /// <summary>
+    /// Загрузка параметров из дерева атрибутов
+    /// </summary>
+    /// <param name="tree"></param>
+    /// <param name="worldAccessForResolve"></param>
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
     {
         base.FromTreeAttributes(tree, worldAccessForResolve);

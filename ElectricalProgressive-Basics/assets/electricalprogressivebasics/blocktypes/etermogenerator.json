@@ -24,7 +24,8 @@
     "voltage": 32,
     "maxCurrent": 1024.0,
     "isolated": true,
-    "isolatedEnvironment": true
+    "isolatedEnvironment": true,
+    "maxHeat": 10.0 // достигает при 1300 градусах
   },
 
   "creativeinventory": {

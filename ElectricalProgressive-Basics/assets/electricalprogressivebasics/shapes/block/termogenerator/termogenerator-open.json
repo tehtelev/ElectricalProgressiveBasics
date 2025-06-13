@@ -13,7 +13,8 @@
 		"iron": "game:block/metal/plate/iron",
 		"zinc": "game:block/metal/plate/zinc",
 		"zinc-sgorevshiy": "block/zinc-sgorevshiy",
-		"iron-s-jrfntovkoy": "block/iron-s-jrfntovkoy"
+		"iron-s-jrfntovkoy": "block/iron-s-jrfntovkoy",
+		"copper-hot": "block/ember"
 	},
 	"elements": [
 		{

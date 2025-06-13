@@ -14,8 +14,9 @@ using Vintagestory.GameContent;
 
 namespace ElectricalProgressive.Content.Block.ETermoGenerator;
 
-public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer
+public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHeatSource
 {
+   
     private Facing facing = Facing.None;
 
     private BEBehaviorElectricalProgressive? ElectricalProgressive => GetBehavior<BEBehaviorElectricalProgressive>();
@@ -73,6 +74,9 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer
     private float prevGenTemp = 20f;
     public float genTemp = 20f;
 
+    /// <summary>
+    /// Коэффициенты КПД в зависимости от высоты пластин
+    /// </summary>
     public static readonly float[] kpdPerHeight =
 {
         0.15F, // 1-й 
@@ -87,11 +91,26 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer
         0.05F  // 10-й 
     };
 
-
+    /// <summary>
+    /// Максимальная температура топлива
+    /// </summary>
     private int maxTemp;
+
+    /// <summary>
+    /// Текущее время горения топлива
+    /// </summary>
     private float fuelBurnTime;
+
+    /// <summary>
+    /// Максимальное время горения топлива
+    /// </summary>
     private float maxBurnTime;
+
+    /// <summary>
+    /// Температура в генераторе
+    /// </summary>
     public float GenTemp => genTemp;
+
 
     /// <summary>
     /// Собственно выходная максимальная мощность
@@ -100,18 +119,36 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer
     {
         get
         {
+            var envTemp = EnvironmentTemperature(); //температура окружающей среды
             if (kpd > 0)
-                return genTemp * kpd / 2.0F;
+            {
+                if (genTemp <= envTemp) //окружающая среда теплее? 
+                {
+                    return 1f;
+                }
+                else
+                {
+                    return (genTemp - envTemp) * kpd / 2.0F;  //учитываем разницу температур с окружающей средой и КПД
+                }
+            }
             else
                 return 1f;
         }
     }
     
-
+    /// <summary>
+    /// КПД генератора в долях
+    /// </summary>
     private float kpd=0f;
 
+    /// <summary>
+    /// Горизонтальные направления для смещения
+    /// </summary>
+    private static readonly BlockFacing[] offsets_horizontal = BlockFacing.HORIZONTALS;
+
+
     private ItemSlot FuelSlot => this.inventory[0];
-    private ItemStack FuelStack
+    public ItemStack FuelStack
     {
         get { return this.inventory[0].Itemstack; }
         set
@@ -160,12 +197,45 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer
     }
 
 
-
+    /// <summary>
+    /// При ломании блока
+    /// </summary>
+    /// <param name="byPlayer"></param>
     public override void OnBlockBroken(IPlayer byPlayer = null)
     {
         base.OnBlockBroken(null);
     }
-    
+
+
+
+
+    /// <summary>
+    /// Отвечает за тепло отдаваемое в окружающую среду
+    /// </summary>
+    /// <param name="world"></param>
+    /// <param name="heatSourcePos"></param>
+    /// <param name="heatReceiverPos"></param>
+    /// <returns></returns>
+    public float GetHeatStrength(
+      IWorldAccessor world,
+      BlockPos heatSourcePos,
+      BlockPos heatReceiverPos)
+    {
+        return Math.Max((float)(((float)this.genTemp - 20.0F) / ((float)1300F - 20.0F) * MyMiniLib.GetAttributeFloat(this.Block, "maxHeat", 0.0F)), 0.0f);
+    }
+
+
+    /// <summary>
+    /// Получает температуру окружающей среды
+    /// </summary>
+    /// <returns></returns>
+    protected virtual int EnvironmentTemperature()
+    {
+        return (int)this.Api.World.BlockAccessor.GetClimateAt(this.Pos, EnumGetClimateMode.ForSuppliedDate_TemperatureOnly, this.Api.World.Calendar.TotalDays).Temperature;
+    }
+
+
+
 
     public void OnSlotModified(int slotId)
     {
@@ -181,6 +251,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer
 
         base.Block = this.Api.World.BlockAccessor.GetBlock(this.Pos);
         this.MarkDirty(this.Api.Side == EnumAppSide.Server, null);
+
         if (this.Api is ICoreClientAPI && this.clientDialog != null)
         {
             clientDialog.Update(genTemp, fuelBurnTime);
@@ -239,28 +310,42 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer
   
     }
 
+
+
     /// <summary>
     /// Расчет КПД генератора
     /// </summary>
     public void Calculate_kpd()
     {
+        // Получаем доступ к блочным данным один раз
         var accessor = this.Api.World.BlockAccessor;
-
         kpd = 0f;
 
-        for (int i = 0; i < 10; i++)
+        // Перебираем потенциальные термопластины по высоте
+        for (int level = 1; level <= 10; level++)
         {
-            var positions = Pos.UpCopy(i+1);
-            var block = accessor.GetBlock(positions);
-
-            if (block is BlockTermoplastini)
-                kpd += kpdPerHeight[i];
-            else
+            // Получаем позицию и блок термопластины
+            var platePos = Pos.UpCopy(level);
+            if (accessor.GetBlock(platePos) is not BlockTermoplastini)
                 break;
+
+            // Проверяем соседние блоки и считаем количество воздухом незаполненных сторон
+            float airSides = 0f;
+            foreach (var face in offsets_horizontal)
+            {
+                var neighBlock = accessor.GetBlock(platePos.AddCopy(face));
+                if (neighBlock != null && neighBlock.BlockId == 0)
+                {
+                    airSides += 1f;
+                }
+            }
+
+            // Учитываем множитель КПД на данном уровне
+            // 0.25f — вклад одной стороны в КПД
+            kpd += airSides * 0.25f * kpdPerHeight[level - 1];
         }
-
-
     }
+
 
 
 
