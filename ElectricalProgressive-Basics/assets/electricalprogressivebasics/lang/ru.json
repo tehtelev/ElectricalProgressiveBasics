@@ -214,5 +214,7 @@
   //"game:ecentrifuge": "Электро-Центрифуга",
   //"game:epress": "Элетро-Пресс",
   "game:termogen": "Термогенератор",
-  "game:gui-word-seconds": "сек."
+  "game:gui-word-seconds": "сек.",
+
+  "game:ewoodcutter": "Электро лесоруб"
 }

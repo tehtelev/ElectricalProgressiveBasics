@@ -1,16 +1,16 @@
-﻿using ElectricalProgressive.Content.Block.EAccumulator;
+﻿using ElectricalProgressive.Content.Block;
+using ElectricalProgressive.Content.Block.EAccumulator;
+using ElectricalProgressive.Content.Block.ECable;
 using ElectricalProgressive.Content.Block.EConnector;
 using ElectricalProgressive.Content.Block.EGenerator;
 using ElectricalProgressive.Content.Block.EMotor;
-using Vintagestory.API.Common;
-using ElectricalProgressive.Content.Block;
 using ElectricalProgressive.Content.Block.ESwitch;
-using Vintagestory.API.Client;
-
-using ElectricalProgressive.Content.Block.ECable;
-using ElectricalProgressive.Content.Block.ETransformator;
 using ElectricalProgressive.Content.Block.ETermoGenerator;
+using ElectricalProgressive.Content.Block.ETransformator;
+using ElectricalProgressive.Content.Block.EWoodcutter;
 using ElectricalProgressive.Content.Block.Termoplastini;
+using Vintagestory.API.Client;
+using Vintagestory.API.Common;
 
 
 
@@ -85,6 +85,10 @@ public class ElectricalProgressiveBasics : ModSystem
         api.RegisterBlockEntityBehaviorClass("BEBehaviorTermoEGenerator", typeof(BEBehaviorTermoEGenerator));
 
         api.RegisterBlockClass("BlockTermoplastini", typeof(BlockTermoplastini));
+
+        api.RegisterBlockClass("BlockEWoodcutter", typeof(BlockEWoodcutter));
+        api.RegisterBlockEntityClass("BlockEntityEWoodcutter", typeof(BlockEntityEWoodcutter));
+        api.RegisterBlockEntityBehaviorClass("BEBehaviorEWoodcutter", typeof(BEBehaviorEWoodcutter));
 
     }
 
