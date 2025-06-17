@@ -205,6 +205,8 @@
   "game:termogen": "Termogenerador",
   "game:gui-word-seconds": "seg.",
 
+  "game:Capacity": "Capacidad",
+
   "block-etermogenerator-*": "Generador termoeléctrico",
   "block-handbooktitle-etermogenerator": "Uso",
   "block-handbooktext-etermogenerator": "Convierte el calor en energía eléctrica ! Funciona con cualquier combustible inflamable. Cuanto mayor sea la temperatura de combustión, mayor será la potencia de salida. La potencia también varía según la temperatura ambiental: cuanto más frío esté el aire, más energía se produce. Requiere <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">placas termoeléctricas</a> en la parte superior.<br><br>Se puede alimentar automáticamente con tolvas.",

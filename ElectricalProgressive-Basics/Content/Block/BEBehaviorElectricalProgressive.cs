@@ -242,6 +242,9 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         stringBuilder.AppendLine("├ " + Lang.Get("Consumption") + ": " + networkInformation?.Consumption + " " + Lang.Get("W"));
         stringBuilder.AppendLine("└ " + Lang.Get("Request") + ": " + networkInformation?.Request + " " + Lang.Get("W"));
 
+        float capacity = (float)((networkInformation?.MaxCapacity == 0f) ? 0f : (networkInformation?.Capacity * 100.0F / networkInformation?.MaxCapacity));
+        stringBuilder.AppendLine("└ " + Lang.Get("Capacity") + ": " + capacity + " %");
+
         stringBuilder.AppendLine(Lang.Get("Block"));
         stringBuilder.AppendLine("├ " + Lang.Get("Max. current") + ": " + networkInformation?.eParamsInNetwork.maxCurrent * networkInformation?.eParamsInNetwork.lines + " " + Lang.Get("A"));
         stringBuilder.AppendLine("├ " + Lang.Get("Current") + ": " + networkInformation?.current + " " + Lang.Get("A"));

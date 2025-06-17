@@ -198,6 +198,9 @@
   "game:termogen": "Generator termiczny",
   "game:gui-word-seconds": "sek.",
 
+  "game:Capacity": "Pojemność",
+
+
   "block-etermogenerator-*": "Generator termoelektryczny",
   "block-handbooktitle-etermogenerator": "Zastosowanie",
   "block-handbooktext-etermogenerator": "Przekształca ciepło w energię elektryczną! Działa na każde paliwo palne. Im wyższa temperatura spalania, tym większa moc wyjściowa. Moc zależy także nieznacznie od temperatury otoczenia: im chłodniejsze powietrze, tym więcej energii. Wymaga zamontowania <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">płyt termoelektrycznych</a> na górze.<br><br>Może być automatycznie dozowany paliwem przy pomocy lejków.",

@@ -6,7 +6,6 @@ using Vintagestory.API.Common;
 using ElectricalProgressive.Content.Block;
 using ElectricalProgressive.Content.Block.ESwitch;
 using Vintagestory.API.Client;
-
 using ElectricalProgressive.Content.Block.ECable;
 using ElectricalProgressive.Content.Block.ETransformator;
 using ElectricalProgressive.Content.Block.ETermoGenerator;
@@ -16,7 +15,7 @@ using ElectricalProgressive.Content.Block.Termoplastini;
 
 
 [assembly: ModDependency("game", "1.20.0")]
-[assembly: ModDependency("electricalprogressivecore", "1.0.5")]
+[assembly: ModDependency("electricalprogressivecore", "1.0.6")]
 [assembly: ModInfo(
     "Electrical Progressive: Basics",
     "electricalprogressivebasics",

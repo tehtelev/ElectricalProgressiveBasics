@@ -197,6 +197,9 @@
   "game:termogen": "Thermogenerator",
   "game:gui-word-seconds": "Sek.",
 
+
+  "game:Capacity": "Kapazität",
+
   "block-etermogenerator-*": "Thermoelektrischer Generator",
   "block-handbooktitle-etermogenerator": "Verwendung",
   "block-handbooktext-etermogenerator": "Wandelt thermische Energie in elektrische Energie um! Funktioniert mit allen brennbaren Materialien. Je höher die Verbrennungstemperatur des Brennstoffs, desto größer die Ausgangsleistung. Die Leistung variiert auch leicht mit der Umgebungstemperatur: Je kälter die Luft, desto mehr Energie wird erzeugt. Benötigt <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">thermoelektrische Platten</a> oben, um zu funktionieren.<br><br>Kann automatisch über Trichter mit Brennstoff versorgt werden.",

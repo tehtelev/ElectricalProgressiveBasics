@@ -210,6 +210,8 @@
   "game:res_speed": "Ном. сопротивление при ном. скорости",
 
 
+  "game:Capacity": "Ёмкость",
+
 
   "game:termogen": "Термогенератор",
   "game:gui-word-seconds": "сек.",

@@ -204,6 +204,9 @@
   "game:termogen": "Thermo Generator",
   "game:gui-word-seconds": "sec.",
 
+
+  "game:Capacity": "Capacity",
+
   "block-etermogenerator-*": "Thermoelectric Generator",
   "block-handbooktitle-etermogenerator": "Usage",
   "block-handbooktext-etermogenerator": "Converts heat into electrical energy! Works with any burnable fuel. The higher the fuel’s burn temperature, the greater the output power. Output also varies slightly with ambient temperature: the colder the air around it, the more energy it produces. Must be fitted with <a href=\"handbook://block-electricalprogressivebasics:termoplastini\">thermoelectric plates</a> on top to function.<br><br>Can be fed fuel automatically via hoppers.",
