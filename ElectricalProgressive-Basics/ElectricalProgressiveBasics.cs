@@ -22,7 +22,7 @@ using ElectricalProgressive.Content.Block.Termoplastini;
     "electricalprogressivebasics",
     Website = "https://github.com/tehtelev/ElectricalProgressiveBasics",
     Description = "Brings electricity into the game!",
-    Version = "1.0.5",
+    Version = "1.0.6",
     Authors = new[] {
         "Tehtelev",
         "Kotl"

@@ -95,6 +95,16 @@
       },
       "G": {
         "type": "item",
+        "allowedVariants": [
+          "bismuth",
+          "bismuthbronze",
+          "tin",
+          "blackbronze",
+          "steel",
+          "iron",
+          "tinbronze",
+          "brass"
+        ],
         "code": "game:metalplate-*",
         "quantity": 1
       },
@@ -129,7 +139,7 @@
       },
       "X": {
         "type": "block",
-        "code": "electricalprogressivebasics:ecable-128v-electrum-single-part",
+        "code": "electricalprogressivebasics:ecable-128v-silver-single-part",
         "quantity": 4
       },
       "G": {
