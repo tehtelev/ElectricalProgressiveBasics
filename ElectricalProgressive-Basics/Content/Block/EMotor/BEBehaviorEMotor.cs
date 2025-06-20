@@ -1,4 +1,5 @@
-﻿using ElectricalProgressive.Interface;
+﻿using ElectricalProgressive.Content.Block.EGenerator;
+using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using System;
 using System.Linq;
@@ -337,20 +338,21 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
         base.GetBlockInfo(forPlayer, stringBuilder);
 
         //проверяем не сгорел ли прибор
-        if (Api.World.BlockAccessor.GetBlockEntity(Blockentity.Pos) is BlockEntityEMotor entity)
-        {
-            if (IsBurned)
-            {
-                stringBuilder.AppendLine(Lang.Get("Burned"));
-            }
-            else
-            {
-                stringBuilder.AppendLine(StringHelper.Progressbar(powerReceive / I_max * 100));
-                stringBuilder.AppendLine("└ " + Lang.Get("Consumption") + ": " + powerReceive + "/" + I_max + " " + Lang.Get("W"));
-            }
+        if (Api.World.BlockAccessor.GetBlockEntity(Blockentity.Pos) is not BlockEntityEMotor entity)
+            return;
 
+        if (IsBurned)
+        {
+            stringBuilder.AppendLine(Lang.Get("Burned"));
+            return;
         }
-        stringBuilder.AppendLine();
+
+        stringBuilder.AppendLine(StringHelper.Progressbar(powerReceive / I_max * 100));
+        stringBuilder.AppendLine("└ " + Lang.Get("Consumption") + ": " + ((int)powerReceive).ToString() + "/" + I_max + " " + Lang.Get("W"));
+
+        float speed = network?.Speed * GearedRatio ?? 0.0F;
+        stringBuilder.AppendLine("└ " + Lang.Get("Speed") + ": " + speed.ToString("F3") + " " + Lang.Get("rps"));
+
     }
 
     public override void WasPlaced(BlockFacing connectedOnFacing)

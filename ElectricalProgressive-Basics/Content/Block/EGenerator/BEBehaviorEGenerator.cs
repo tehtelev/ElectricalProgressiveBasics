@@ -252,8 +252,12 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
         }
 
         stringBuilder.AppendLine(StringHelper.Progressbar(Math.Min(PowerGive, PowerOrder) / I_max * 100));
-        stringBuilder.AppendLine("└ " + Lang.Get("Production") + ": " + Math.Min(PowerGive, PowerOrder) + "/" + I_max + " " + Lang.Get("W"));
+        stringBuilder.AppendLine("└ " + Lang.Get("Production") + ": " + ((int)Math.Min(PowerGive, PowerOrder)).ToString() + "/" + I_max + " " + Lang.Get("W"));
+        float speed = network?.Speed * GearedRatio ?? 0.0F;
+        stringBuilder.AppendLine("└ " + Lang.Get("Speed") + ": " + speed.ToString("F3") + " " + Lang.Get("rps"));
     }
+
+
 
     /// <summary>
     /// Выдается игре шейп для отрисовки ротора

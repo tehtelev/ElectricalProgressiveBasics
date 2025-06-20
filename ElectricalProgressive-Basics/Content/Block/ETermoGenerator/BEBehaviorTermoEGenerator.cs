@@ -115,7 +115,7 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
         }
 
         stringBuilder.AppendLine(StringHelper.Progressbar(Math.Min(PowerGive, PowerOrder) / entity.Power * 100));
-        stringBuilder.AppendLine("└ " + Lang.Get("Production") + ": " + Math.Min(PowerGive, PowerOrder) + "/" + entity.Power + " " + Lang.Get("W"));
+        stringBuilder.AppendLine("└ " + Lang.Get("Production") + ": " + ((int)Math.Min(PowerGive, PowerOrder)).ToString() + "/" + ((int)entity.Power).ToString() + " " + Lang.Get("W"));
     }
 
 

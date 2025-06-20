@@ -207,6 +207,8 @@
 
   "block-termoplastini": "Płyty termoelektryczne",
   "block-handbooktitle-termoplastini": "Zastosowanie",
-  "block-handbooktext-termoplastini": "Płyty termoelektryczne w generatorach termoelektrycznych zamieniają ciepło na prąd. Działają na zasadzie wytwarzania siły elektromotorycznej na styku dwóch różnych metali. Różnica temperatur powstaje między dymem z palącego się paliwa a chłodnym powietrzem.<br><br>Umieść na <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">generatorze termoelektrycznym</a>, maksymalnie do 10 sztuk. Każda kolejna płyta daje mniejszy przyrost mocy. 10 płyt daje 100 % mocy. Uwaga: bloki przylegające bezpośrednio do płyt ograniczają chłodzenie i obniżają efektywność."
+  "block-handbooktext-termoplastini": "Płyty termoelektryczne w generatorach termoelektrycznych zamieniają ciepło na prąd. Działają na zasadzie wytwarzania siły elektromotorycznej na styku dwóch różnych metali. Różnica temperatur powstaje między dymem z palącego się paliwa a chłodnym powietrzem.<br><br>Umieść na <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">generatorze termoelektrycznym</a>, maksymalnie do 10 sztuk. Każda kolejna płyta daje mniejszy przyrost mocy. 10 płyt daje 100 % mocy. Uwaga: bloki przylegające bezpośrednio do płyt ograniczają chłodzenie i obniżają efektywność.",
+
+  "game:Speed": "Prędkość"
 
 }

@@ -213,6 +213,9 @@
 
   "block-termoplastini": "Thermoelectric Plates",
   "block-handbooktitle-termoplastini": "Usage",
-  "block-handbooktext-termoplastini": "Thermoelectric plates are used in thermoelectric generators to convert heat into electricity. They work by generating a thermal electromotive force at the junction of two dissimilar metals. One side is heated by combustion smoke, the other cooled by ambient air.<br><br>Place on top of a <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">thermoelectric generator</a>, up to 10 plates. Each additional plate yields diminishing returns. Ten plates provide 100% generator output. Note: any blocks placed directly against the plates will reduce overall efficiency, as they block airflow and cooling."
+  "block-handbooktext-termoplastini": "Thermoelectric plates are used in thermoelectric generators to convert heat into electricity. They work by generating a thermal electromotive force at the junction of two dissimilar metals. One side is heated by combustion smoke, the other cooled by ambient air.<br><br>Place on top of a <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">thermoelectric generator</a>, up to 10 plates. Each additional plate yields diminishing returns. Ten plates provide 100% generator output. Note: any blocks placed directly against the plates will reduce overall efficiency, as they block airflow and cooling.",
+
+  "game:Speed": "Speed"
+
 
 }
