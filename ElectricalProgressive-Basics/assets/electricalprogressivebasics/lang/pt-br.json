@@ -213,6 +213,9 @@
   "block-handbooktitle-termoplastini": "Uso",
   "block-handbooktext-termoplastini": "As placas termoelétricas são usadas em geradores termoelétricos para converter calor em eletricidade. Funcionam pela geração de força eletromotriz térmica na junção de dois metais diferentes. A diferença de temperatura vem da fumaça quente do combustível de um lado e do ar ambiente frio do outro.<br><br>Coloque sobre o <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">gerador termoelétrico</a>, até 10 placas. Cada placa adicional oferece ganho de potência decrescente. Dez placas fornecem 100 % da potência. Atenção: blocos encostados diretamente nas placas reduzem o resfriamento e diminuem a eficiência.",
 
-  "game:Speed": "Velocidade"
+  "game:Speed": "Velocidade",
+
+  "game:ThickenCables": "Espessamento de cabos"
+
 
 }

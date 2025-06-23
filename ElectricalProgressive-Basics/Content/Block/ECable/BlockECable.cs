@@ -10,6 +10,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Util;
 
 namespace ElectricalProgressive.Content.Block.ECable
 {
@@ -354,7 +355,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             //перебираем все грани выделенных кабелей
             foreach (var face in FacingHelper.Faces(selectedFacing))
             {
-                var indexV = entity.AllEparams[face.Index].voltage; //индекс напряжения этой грани
+                var indexV = entity.AllEparams![face.Index].voltage; //индекс напряжения этой грани
                 var material = entity.AllEparams[face.Index].material; //индекс материала этой грани
                 var indexQ = entity.AllEparams[face.Index].lines; //индекс линий этой грани
                 var isol = entity.AllEparams[face.Index].isolated; //изолировано ли?
@@ -408,7 +409,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
             foreach (var face in FacingHelper.Faces(entity.Connection))         //перебираем все грани выделенных кабелей
             {
-                var indexV = entity.AllEparams[face.Index].voltage;          //индекс напряжения этой грани
+                var indexV = entity.AllEparams![face.Index].voltage;          //индекс напряжения этой грани
                 var material = entity.AllEparams[face.Index].material;          //индекс материала этой грани
                 var indexQ = entity.AllEparams[face.Index].lines;          //индекс линий этой грани
                 var isolated = entity.AllEparams[face.Index].isolated;          //изолировано ли?
@@ -1952,6 +1953,30 @@ namespace ElectricalProgressive.Content.Block.ECable
             dsc.AppendLine(Lang.Get("Resistivity") + ": " + MyMiniLib.GetAttributeFloat(inSlot.Itemstack.Block, "res", 0) + " " + Lang.Get("units"));
             dsc.AppendLine(Lang.Get("WResistance") + ": " + (inSlot.Itemstack.Block.Code.Path.Contains("isolated") ? Lang.Get("Yes") : Lang.Get("No")));
         }
+
+
+        /// <summary>
+        /// Получение подсказок для взаимодействия с блоком
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="selection"></param>
+        /// <param name="forPlayer"></param>
+        /// <returns></returns>
+        public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
+        {
+            return new WorldInteraction[]
+            {
+                new WorldInteraction()
+                {
+                    ActionLangCode = "ThickenCables",
+                    HotKeyCode = "shift",
+                    MouseButton = EnumMouseButton.Right
+                }
+            }.Append(base.GetPlacedBlockInteractionHelp(world, selection, forPlayer));
+        }
+
+
+
 
         /// <summary>
         /// Структура для хранения ключей для словарей

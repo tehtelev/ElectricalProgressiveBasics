@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Common;
+﻿using ElectricalProgressive.Utils;
+using Vintagestory.API.Common;
 
 namespace ElectricalProgressive.Content.Block;
 

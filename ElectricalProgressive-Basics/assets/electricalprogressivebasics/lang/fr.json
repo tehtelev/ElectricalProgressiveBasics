@@ -212,7 +212,10 @@
   "block-handbooktitle-termoplastini": "Utilisation",
   "block-handbooktext-termoplastini": "Les plaques thermoélectriques sont utilisées dans les générateurs thermoélectriques pour convertir la chaleur en électricité. Elles fonctionnent grâce à la force électromotrice thermique créée à la jonction de deux métaux différents. L’écart de température est dû à la fumée chaude du combustible d’un côté et à l’air ambiant frais de l’autre.<br><br>Se placent sur le <a href=\"handbook://block-electricalprogressivebasics:etermogenerator-south\">générateur thermoélectrique</a>, jusqu’à 10 plaques. Chaque plaque supplémentaire apporte un gain de puissance décroissant. Dix plaques fournissent 100 % de la puissance. Note : les blocs adjacents empêchent le refroidissement et réduisent l’efficacité globale.",
 
-  "game:Speed": "Vitesse"
+  "game:Speed": "Vitesse",
+
+  "game:ThickenCables": "Épaississement des câbles"
+
 
 
 }
