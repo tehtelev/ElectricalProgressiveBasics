@@ -16,7 +16,8 @@ public abstract class BlockEBase : Vintagestory.API.Common.Block
     /// <returns></returns>
     public override bool DoPlaceBlock(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSelection, ItemStack byItemStack)
     {
-        if (byItemStack.Block.Variant["status"] == "burned")
+        //if (byItemStack.Block.Variant["state"] == "burned")
+        if (byItemStack.Block.Code.GetName().Contains("burned")) // пока так 
             return false;
 
         return base.DoPlaceBlock(world, byPlayer, blockSelection, byItemStack);

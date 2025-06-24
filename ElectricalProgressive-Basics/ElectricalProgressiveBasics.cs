@@ -10,6 +10,9 @@ using ElectricalProgressive.Content.Block.ECable;
 using ElectricalProgressive.Content.Block.ETransformator;
 using ElectricalProgressive.Content.Block.ETermoGenerator;
 using ElectricalProgressive.Content.Block.Termoplastini;
+using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
+using System.Collections.Generic;
 
 
 
@@ -30,6 +33,11 @@ using ElectricalProgressive.Content.Block.Termoplastini;
 
 namespace ElectricalProgressive;
 
+
+
+
+
+
 public class ElectricalProgressiveBasics : ModSystem
 {
 
@@ -37,7 +45,12 @@ public class ElectricalProgressiveBasics : ModSystem
     private ICoreClientAPI capi = null!;
 
 
-
+    public static Dictionary<int, string> causeBurn = new Dictionary<int, string>
+    {
+        { 1, Lang.Get("causeCurrent") },
+        { 2, Lang.Get("causeVoltage") },
+        { 3, Lang.Get("causeEnvironment") }
+    };
 
 
     public override void Start(ICoreAPI api)

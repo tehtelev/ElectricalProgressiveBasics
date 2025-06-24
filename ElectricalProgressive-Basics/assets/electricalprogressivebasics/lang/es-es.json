@@ -217,7 +217,12 @@
 
   "game:Speed": "Velocidad",
 
-  "game:ThickenCables": "Engrosamiento de cables"
+  "game:ThickenCables": "Engrosamiento de cables",
+
+  "game:causeCurrent": "Sobrecarga de corriente",
+  "game:causeVoltage": "Sobretensión",
+  "game:causeEnvironment": "Exposición a líquidos"
+
 
 
 

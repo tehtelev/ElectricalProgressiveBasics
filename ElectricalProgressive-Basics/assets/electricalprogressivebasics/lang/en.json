@@ -217,7 +217,12 @@
 
   "game:Speed": "Speed",
 
-  "game:ThickenCables": "Thicken Cables"
+  "game:ThickenCables": "Thicken Cables",
+
+  "game:causeCurrent": "Current overload",
+  "game:causeVoltage": "Overvoltage",
+  "game:causeEnvironment": "Liquid exposure"
+
 
 
 }

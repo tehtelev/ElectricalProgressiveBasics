@@ -214,8 +214,11 @@
 
   "game:Speed": "Vitesse",
 
-  "game:ThickenCables": "Épaississement des câbles"
+  "game:ThickenCables": "Épaississement des câbles",
 
+  "game:causeCurrent": "Surcharge de courant",
+  "game:causeVoltage": "Surtension",
+  "game:causeEnvironment": "Exposition à un liquide"
 
 
 }

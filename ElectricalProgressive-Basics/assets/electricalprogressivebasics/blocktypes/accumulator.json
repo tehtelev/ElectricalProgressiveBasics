@@ -20,7 +20,7 @@
       ]
     },
     {
-      "code": "status",
+      "code": "state",
       "states": [
         "normal",
         "burned"
@@ -106,7 +106,7 @@
   },
 
   "shape": {
-    "base": "block/accumulator/accumulator-{tier}-{status}"
+    "base": "block/accumulator/accumulator-{tier}-{state}"
   },
 
   "resistance": 1,

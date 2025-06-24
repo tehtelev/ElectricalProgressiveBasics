@@ -210,7 +210,12 @@
 
   "game:Speed": "Geschwindigkeit",
 
-  "game:ThickenCables": "Kabelverdickung"
+  "game:ThickenCables": "Kabelverdickung",
+
+  "game:causeCurrent": "Stromüberlastung",
+  "game:causeVoltage": "Überspannung",
+  "game:causeEnvironment": "Einwirkung von Flüssigkeit"
+
 
 
 

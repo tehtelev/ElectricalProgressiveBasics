@@ -262,8 +262,8 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityECable) //если кабель!
         {
-            stringBuilder.AppendLine("├ " + Lang.Get("Resistivity") + ": " + networkInformation?.eParamsInNetwork.resisitivity / (networkInformation!.eParamsInNetwork.isolated ? 2.0F : 1.0F) + " " + Lang.Get("Om/line"));
-            stringBuilder.AppendLine("├ " + Lang.Get("Resistance") + ": " + networkInformation?.eParamsInNetwork.resisitivity / (networkInformation?.eParamsInNetwork.lines * networkInformation?.eParamsInNetwork.crossArea) / (networkInformation.eParamsInNetwork.isolated ? 2.0F : 1.0F) + " " + Lang.Get("Om"));
+            stringBuilder.AppendLine("├ " + Lang.Get("Resistivity") + ": " + networkInformation?.eParamsInNetwork.resistivity / (networkInformation!.eParamsInNetwork.isolated ? 2.0F : 1.0F) + " " + Lang.Get("Om/line"));
+            stringBuilder.AppendLine("├ " + Lang.Get("Resistance") + ": " + networkInformation?.eParamsInNetwork.resistivity / (networkInformation?.eParamsInNetwork.lines * networkInformation?.eParamsInNetwork.crossArea) / (networkInformation.eParamsInNetwork.isolated ? 2.0F : 1.0F) + " " + Lang.Get("Om"));
             stringBuilder.AppendLine("├ " + Lang.Get("Lines") + ": " + networkInformation?.eParamsInNetwork.lines + " " + Lang.Get("pcs."));
             stringBuilder.AppendLine("├ " + Lang.Get("Section size") + ": " + networkInformation?.eParamsInNetwork.crossArea * networkInformation?.eParamsInNetwork.lines + " " + Lang.Get("units"));
         }

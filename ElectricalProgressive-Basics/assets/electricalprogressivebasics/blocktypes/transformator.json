@@ -40,7 +40,7 @@
 
   "variantgroups": [
     {
-      "code": "status",
+      "code": "state",
       "states": [
         "normal",
         "burned"
@@ -67,19 +67,19 @@
 
   "shapebytype": {
     "*-north": {
-      "base": "block/transformator/transformator-{status}",
+      "base": "block/transformator/transformator-{state}",
       "rotateY": 0
     },
     "*-east": {
-      "base": "block/transformator/transformator-{status}",
+      "base": "block/transformator/transformator-{state}",
       "rotateY": 270
     },
     "*-south": {
-      "base": "block/transformator/transformator-{status}",
+      "base": "block/transformator/transformator-{state}",
       "rotateY": 180
     },
     "*-west": {
-      "base": "block/transformator/transformator-{status}",
+      "base": "block/transformator/transformator-{state}",
       "rotateY": 90
     }
   },

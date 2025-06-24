@@ -210,7 +210,12 @@
 
   "game:Speed": "Швидкість",
 
-  "game:ThickenCables": "Потовщення кабелів"
+  "game:ThickenCables": "Потовщення кабелів",
+
+  "game:causeCurrent": "Перевантаження за струмом",
+  "game:causeVoltage": "Перевищення напруги",
+  "game:causeEnvironment": "Вплив рідини"
+
 
 
 }

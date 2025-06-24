@@ -17,7 +17,7 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     {
     }
 
-    public bool IsBurned => this.Block.Variant["status"] == "burned";
+    public bool IsBurned => this.Block.Variant["state"] == "burned";
 
     /// <summary>
     /// предыдущее значение емкости
@@ -122,9 +122,9 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
                 }
             }
 
-            if (hasBurnout && entity.Block.Variant["status"] != "burned")
+            if (hasBurnout && entity.Block.Variant["state"] != "burned")
             {
-                this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("status", "burned")).BlockId, Pos);
+                this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("state", "burned")).BlockId, Pos);
             }
         }
 
@@ -151,19 +151,35 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
         base.GetBlockInfo(forPlayer, stringBuilder);
 
         //проверяем не сгорел ли прибор
-        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityEAccumulator entity)
+        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is not BlockEntityEAccumulator entity)
+            return;
+
+        if (IsBurned)
         {
-            if (IsBurned)
+            // выясняем причину сгорания (надо куда-то вынести сей кусочек)
+            string cause = "";
+            if (entity.AllEparams.Any(e => e.causeBurnout==1))
             {
-                stringBuilder.AppendLine(Lang.Get("Burned"));
+                cause = ElectricalProgressiveBasics.causeBurn[1];
             }
-            else
+            else if (entity.AllEparams.Any(e => e.causeBurnout == 2))
             {
-                stringBuilder.AppendLine(StringHelper.Progressbar(GetCapacity() * 100.0f / GetMaxCapacity()));
-                stringBuilder.AppendLine("└ " + Lang.Get("Storage") + ": " + ((int)GetCapacity()).ToString() + "/" + ((int)GetMaxCapacity()).ToString() + " " + Lang.Get("J"));
+                cause = ElectricalProgressiveBasics.causeBurn[2];
+            }
+            else if (entity.AllEparams.Any(e => e.causeBurnout == 3))
+            {
+                cause = ElectricalProgressiveBasics.causeBurn[3];
             }
 
+            stringBuilder.AppendLine(Lang.Get("Burned") + " " + cause);
+            return;
         }
+
+        stringBuilder.AppendLine(StringHelper.Progressbar(GetCapacity() * 100.0f / GetMaxCapacity()));
+        stringBuilder.AppendLine("└ " + Lang.Get("Storage") + ": " + ((int)GetCapacity()).ToString() + "/" + ((int)GetMaxCapacity()).ToString() + " " + Lang.Get("J"));
+
+
+
 
         stringBuilder.AppendLine();
     }

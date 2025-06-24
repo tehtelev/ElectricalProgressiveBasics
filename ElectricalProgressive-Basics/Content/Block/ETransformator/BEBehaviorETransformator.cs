@@ -19,7 +19,7 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
         maxCurrent = MyMiniLib.GetAttributeFloat(this.Block, "maxCurrent", 5.0F);
     }
 
-    public bool isBurned => this.Block.Variant["status"] == "burned";
+    public bool isBurned => this.Block.Variant["state"] == "burned";
     public new BlockPos Pos => this.Blockentity.Pos;
 
     public int highVoltage => MyMiniLib.GetAttributeInt(this.Block, "voltage", 32);
@@ -33,21 +33,33 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
         base.GetBlockInfo(forPlayer, stringBuilder);
 
         //проверяем не сгорел ли прибор
-        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityETransformator entity)
+        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is not BlockEntityETransformator entity)
+            return;
+
+        if (isBurned)
         {
-            if (isBurned)
+            // выясняем причину сгорания (надо куда-то вынести сей кусочек)
+            string cause = "";
+            if (entity.AllEparams.Any(e => e.causeBurnout == 1))
             {
-                stringBuilder.AppendLine(Lang.Get("Burned"));
+                cause = ElectricalProgressiveBasics.causeBurn[1];
             }
-            else
+            else if (entity.AllEparams.Any(e => e.causeBurnout == 2))
             {
-                //stringBuilder.AppendLine(StringHelper.Progressbar(getPower() / (lowVoltage * maxCurrent) * 100));
-                //stringBuilder.AppendLine("└ " + Lang.Get("Power") + ": " + getPower() + " / " + lowVoltage * maxCurrent + " " + Lang.Get("W"));
-                stringBuilder.AppendLine("└ " + Lang.Get("Power") + ": " + ((int)getPower()).ToString() + " " + Lang.Get("W"));
+                cause = ElectricalProgressiveBasics.causeBurn[2];
+            }
+            else if (entity.AllEparams.Any(e => e.causeBurnout == 3))
+            {
+                cause = ElectricalProgressiveBasics.causeBurn[3];
             }
 
+            stringBuilder.AppendLine(Lang.Get("Burned") + " " + cause);
+            return;
         }
 
+        //stringBuilder.AppendLine(StringHelper.Progressbar(getPower() / (lowVoltage * maxCurrent) * 100));
+        //stringBuilder.AppendLine("└ " + Lang.Get("Power") + ": " + getPower() + " / " + lowVoltage * maxCurrent + " " + Lang.Get("W"));
+        stringBuilder.AppendLine("└ " + Lang.Get("Power") + ": " + ((int)getPower()).ToString() + " " + Lang.Get("W"));
         stringBuilder.AppendLine();
     }
 
@@ -65,9 +77,9 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
             {
                 ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
             }
-            if (hasBurnout && entity.Block.Variant["status"] != "burned")
+            if (hasBurnout && entity.Block.Variant["state"] != "burned")
             {
-                this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("status", "burned")).BlockId, Pos);
+                this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("state", "burned")).BlockId, Pos);
             }
         }
 
