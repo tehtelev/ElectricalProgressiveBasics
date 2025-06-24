@@ -1970,7 +1970,7 @@ namespace ElectricalProgressive.Content.Block.ECable
                 {
                     ActionLangCode = "ThickenCables",
                     HotKeyCode = "shift",
-                    MouseButton = EnumMouseButton.Right
+                    MouseButton = EnumMouseButton.Right                    
                 }
             }.Append(base.GetPlacedBlockInteractionHelp(world, selection, forPlayer));
         }

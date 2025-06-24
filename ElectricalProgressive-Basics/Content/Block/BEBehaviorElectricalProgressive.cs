@@ -1,4 +1,5 @@
 ﻿using ElectricalProgressive.Content.Block.ECable;
+using ElectricalProgressive.Content.Block.EConnector;
 using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using Newtonsoft.Json;
@@ -195,12 +196,15 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         //храним направления проводов в этом блоке
         var selectedFacing = Facing.None;
 
+        var entity = this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos); // получаем блок-энитити, чтобы получить информацию о нем
+        string methodForInformation=""; //метод получения информации о сети, в зависимости от типа блока-энитити
+
         //если это кабель, то мы можем вывести только информацию о сети на одной грани
-        if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityECable { AllEparams: not null } entity)
+        if (entity is BlockEntityECable blockEntityECable && entity is not BlockEntityEConnector && blockEntityECable.AllEparams != null)
         {
             if (forPlayer is { CurrentBlockSelection: { } blockSelection })
             {
-                var key = CacheDataKey.FromEntity(entity);
+                var key = CacheDataKey.FromEntity(blockEntityECable);
                 var hitPosition = blockSelection.HitPosition;
 
                 var sf = new SelectionFacingCable();
@@ -211,15 +215,22 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
                 else
                     return;
 
+                methodForInformation = "thisFace"; // только указанную грань
             }
         }
-        else    //для не кабелей берем все что есть
+        else if (entity is BlockEntityEConnector blockEntityEConnector && blockEntityEConnector.AllEparams != null) //если это мет блок
+        {
+            selectedFacing = Facing.AllAll;
+            methodForInformation = "currentFace"; // берем информацию о любой грани, где ток больше 0
+        }
+        else     //для не кабелей берем все что есть
         {
             selectedFacing = this.Connection;
+            methodForInformation = "firstFace"; // берем информацию о первой грани в массиве из многих
         }
 
         // получаем информацию о сети
-        var networkInformation = this.System?.GetNetworks(this.Blockentity.Pos, selectedFacing);
+        var networkInformation = this.System?.GetNetworks(this.Blockentity.Pos, selectedFacing, methodForInformation);
 
         //отслеживаем состояние кнопки для подробностей
         var capi = (ICoreClientAPI)Api;
@@ -260,6 +271,9 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         stringBuilder.AppendLine("└ " + Lang.Get("Max voltage") + ": " + networkInformation?.eParamsInNetwork.voltage + " " + Lang.Get("V"));
     }
 
+
+
+
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
@@ -270,6 +284,8 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         //массив массивов приходится сохранять через newtonsoftjson
         tree.SetBytes(BlockEntityEBase.AllEparamsKey, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.allEparams)));
     }
+
+
 
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
     {

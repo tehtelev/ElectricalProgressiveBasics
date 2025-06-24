@@ -15,13 +15,13 @@ using ElectricalProgressive.Content.Block.Termoplastini;
 
 
 [assembly: ModDependency("game", "1.20.0")]
-[assembly: ModDependency("electricalprogressivecore", "1.0.6")]
+[assembly: ModDependency("electricalprogressivecore", "1.1.0")]
 [assembly: ModInfo(
     "Electrical Progressive: Basics",
     "electricalprogressivebasics",
     Website = "https://github.com/tehtelev/ElectricalProgressiveBasics",
     Description = "Brings electricity into the game!",
-    Version = "1.0.6",
+    Version = "1.1.0",
     Authors = new[] {
         "Tehtelev",
         "Kotl"
