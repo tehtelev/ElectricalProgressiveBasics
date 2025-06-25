@@ -44,7 +44,9 @@ public class ElectricalProgressiveBasics : ModSystem
     private ICoreAPI api = null!;
     private ICoreClientAPI capi = null!;
 
-
+    /// <summary>
+    /// Причины сгорания электрических блоков
+    /// </summary>
     public static Dictionary<int, string> causeBurn = new Dictionary<int, string>
     {
         { 1, Lang.Get("causeCurrent") },
@@ -53,6 +55,11 @@ public class ElectricalProgressiveBasics : ModSystem
     };
 
 
+
+    /// <summary>
+    /// Старт общего потока
+    /// </summary>
+    /// <param name="api"></param>
     public override void Start(ICoreAPI api)
     {
         base.Start(api);
@@ -61,6 +68,7 @@ public class ElectricalProgressiveBasics : ModSystem
 
         api.RegisterBlockClass("BlockECable", typeof(BlockECable));
         api.RegisterBlockEntityClass("BlockEntityECable", typeof(BlockEntityECable));
+        api.RegisterBlockEntityBehaviorClass("BEBehaviorECable", typeof(BEBehaviorECable));
 
         api.RegisterBlockClass("BlockESwitch", typeof(BlockESwitch));
 

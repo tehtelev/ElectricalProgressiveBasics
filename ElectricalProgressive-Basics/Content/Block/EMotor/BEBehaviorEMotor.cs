@@ -342,25 +342,7 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
             return;
 
         if (IsBurned)
-        {
-            // выясняем причину сгорания (надо куда-то вынести сей кусочек)
-            string cause = "";
-            if (entity.AllEparams.Any(e => e.causeBurnout == 1))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[1];
-            }
-            else if (entity.AllEparams.Any(e => e.causeBurnout == 2))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[2];
-            }
-            else if (entity.AllEparams.Any(e => e.causeBurnout == 3))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[3];
-            }
-
-            stringBuilder.AppendLine(Lang.Get("Burned") + " " + cause);
             return;
-        }
 
         stringBuilder.AppendLine(StringHelper.Progressbar(powerReceive / I_max * 100));
         stringBuilder.AppendLine("└ " + Lang.Get("Consumption") + ": " + ((int)powerReceive).ToString() + "/" + I_max + " " + Lang.Get("W"));

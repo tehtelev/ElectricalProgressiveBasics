@@ -19,7 +19,7 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
         maxCurrent = MyMiniLib.GetAttributeFloat(this.Block, "maxCurrent", 5.0F);
     }
 
-    public bool isBurned => this.Block.Variant["state"] == "burned";
+    public bool IsBurned => this.Block.Variant["state"] == "burned";
     public new BlockPos Pos => this.Blockentity.Pos;
 
     public int highVoltage => MyMiniLib.GetAttributeInt(this.Block, "voltage", 32);
@@ -36,26 +36,8 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is not BlockEntityETransformator entity)
             return;
 
-        if (isBurned)
-        {
-            // выясняем причину сгорания (надо куда-то вынести сей кусочек)
-            string cause = "";
-            if (entity.AllEparams.Any(e => e.causeBurnout == 1))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[1];
-            }
-            else if (entity.AllEparams.Any(e => e.causeBurnout == 2))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[2];
-            }
-            else if (entity.AllEparams.Any(e => e.causeBurnout == 3))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[3];
-            }
-
-            stringBuilder.AppendLine(Lang.Get("Burned") + " " + cause);
+        if (IsBurned)
             return;
-        }
 
         //stringBuilder.AppendLine(StringHelper.Progressbar(getPower() / (lowVoltage * maxCurrent) * 100));
         //stringBuilder.AppendLine("└ " + Lang.Get("Power") + ": " + getPower() + " / " + lowVoltage * maxCurrent + " " + Lang.Get("W"));

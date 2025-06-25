@@ -246,25 +246,7 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
             return;
 
         if (IsBurned)
-        {
-            // выясняем причину сгорания (надо куда-то вынести сей кусочек)
-            string cause = "";
-            if (entity.AllEparams.Any(e => e.causeBurnout == 1))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[1];
-            }
-            else if (entity.AllEparams.Any(e => e.causeBurnout == 2))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[2];
-            }
-            else if (entity.AllEparams.Any(e => e.causeBurnout == 3))
-            {
-                cause = ElectricalProgressiveBasics.causeBurn[3];
-            }
-
-            stringBuilder.AppendLine(Lang.Get("Burned") + " " + cause);
             return;
-        }
 
         stringBuilder.AppendLine(StringHelper.Progressbar(Math.Min(PowerGive, PowerOrder) / I_max * 100));
         stringBuilder.AppendLine("└ " + Lang.Get("Production") + ": " + ((int)Math.Min(PowerGive, PowerOrder)).ToString() + "/" + I_max + " " + Lang.Get("W"));

@@ -216,6 +216,8 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
                     return;
 
                 methodForInformation = "thisFace"; // только указанную грань
+
+                
             }
         }
         else if (entity is BlockEntityEConnector blockEntityEConnector && blockEntityEConnector.AllEparams != null) //если это мет блок
@@ -228,6 +230,37 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             selectedFacing = this.Connection;
             methodForInformation = "firstFace"; // берем информацию о первой грани в массиве из многих
         }
+
+
+
+        // работаем с выводом информации о причинах сгорания
+        if (this.System?.parts.TryGetValue(this.Blockentity.Pos, out var part) ?? false)
+        {
+            foreach (var face in FacingHelper.Faces(selectedFacing))
+            {
+                var faceIndex = face.Index;
+
+                if (part.eparams[faceIndex].burnout)
+                {
+                    string cause = part.eparams[faceIndex].causeBurnout switch
+                    {
+                        1 => ElectricalProgressiveBasics.causeBurn[1],
+                        2 => ElectricalProgressiveBasics.causeBurn[2],
+                        3 => ElectricalProgressiveBasics.causeBurn[3],
+                        _ => null!
+                    };
+
+                    if (cause is not null)
+                    {
+                        stringBuilder.AppendLine(Lang.Get("Burned") + " " + cause);
+                        break;
+                    }
+                }
+            }
+        }
+
+
+
 
         // получаем информацию о сети
         var networkInformation = this.System?.GetNetworks(this.Blockentity.Pos, selectedFacing, methodForInformation);
