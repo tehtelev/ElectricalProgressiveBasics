@@ -18,6 +18,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 {
     private IElectricAccumulator? accumulator;
     private IElectricConsumer? consumer;
+    private IElectricConductor? conductor;
     private IElectricProducer? producer;
     private IElectricTransformator? transformator;
 
@@ -132,6 +133,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
 
         this.consumer = null;
+        this.conductor = null;
         this.producer = null;
         this.accumulator = null;
         this.transformator = null;
@@ -155,10 +157,13 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
                 case IElectricTransformator { } transformator:
                     this.transformator = transformator;
                     break;
+                case IElectricConductor { } conductor:
+                    this.conductor = conductor;
+                    break;
             }
         }
 
-
+        system.SetConductor(this.Blockentity.Pos, this.conductor);
         system.SetConsumer(this.Blockentity.Pos, this.consumer);
         system.SetProducer(this.Blockentity.Pos, this.producer);
         system.SetAccumulator(this.Blockentity.Pos, this.accumulator);

@@ -5,7 +5,6 @@ using ElectricalProgressive;
 using ElectricalProgressive.Content.Block;
 using ElectricalProgressive.Content.Block.Termoplastini;
 using ElectricalProgressive.Utils;
-using HarmonyLib;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -234,7 +233,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     }
 
 
-
+    private long listenerId;
 
     public override InventoryBase Inventory => inventory;
 
@@ -276,7 +275,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
         this.inventory.Pos = this.Pos;
         this.inventory.LateInitialize(InventoryClassName + "-" + Pos, api);
 
-        this.RegisterGameTickListener(new Action<float>(OnBurnTick), 1000);
+        listenerId=this.RegisterGameTickListener(new Action<float>(OnBurnTick), 1000);
 
         CanDoBurn();
     }
@@ -338,7 +337,29 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     public override void OnBlockUnloaded()
     {
         base.OnBlockUnloaded();
+
         MeshData.Clear(); //не забываем очищать кэш мэша при выгрузке блока
+
+        // закрываем диалоговое окно, если оно открыто
+        if (this.Api is ICoreClientAPI && this.clientDialog != null)
+        {
+            this.clientDialog.TryClose();
+            this.clientDialog = null;
+        }
+
+        // отключаем слушатель тика горения топлива
+        UnregisterGameTickListener(listenerId);
+
+        // отключаем аниматор, если он есть
+        if (this.Api.Side == EnumAppSide.Client && this.animUtil != null)
+        {
+            this.animUtil.Dispose();
+        }
+
+        // очищаем ссылки на API
+        capi = null;
+        sapi = null;
+
     }
 
     /// <summary>
@@ -619,13 +640,36 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     public override void OnBlockRemoved()
     {
         base.OnBlockRemoved();
-        this.clientDialog?.TryClose();
+
         var electricity = ElectricalProgressive;
 
         if (electricity != null)
         {
             electricity.Connection = Facing.None;
         }
+
+
+        MeshData.Clear(); //не забываем очищать кэш мэша при выгрузке блока
+
+        // закрываем диалоговое окно, если оно открыто
+        if (this.Api is ICoreClientAPI && this.clientDialog != null)
+        {
+            this.clientDialog.TryClose();
+            this.clientDialog = null;
+        }
+
+        // отключаем слушатель тика горения топлива
+        UnregisterGameTickListener(listenerId);
+
+        // отключаем аниматор, если он есть
+        if (this.Api.Side == EnumAppSide.Client && this.animUtil != null)
+        {
+            this.animUtil.Dispose();
+        }
+
+        // очищаем ссылки на API
+        capi = null;
+        sapi = null;
     }
 
 

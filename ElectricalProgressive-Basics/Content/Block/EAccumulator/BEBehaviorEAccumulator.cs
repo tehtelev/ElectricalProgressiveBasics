@@ -98,6 +98,10 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
         return this.LastCapacity;
     }
 
+
+    /// <summary>
+    /// Обновление блока аккумулятора
+    /// </summary>
     public void Update()
     {
 
@@ -114,10 +118,10 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
                 switch (entity.Block.Variant["tier"])
                 {
                     case "tier1":
-                        ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
+                        ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.1, 0, 0.1));
                         break;
                     case "tier2":
-                        ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.5, 1.9, 0.5));
+                        ParticleManager.SpawnBlackSmoke(this.Api.World, Pos.ToVec3d().Add(0.1, 1.0, 0.1));
                         break;
                 }
             }
@@ -125,6 +129,22 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
             if (hasBurnout && entity.Block.Variant["state"] != "burned")
             {
                 this.Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant("state", "burned")).BlockId, Pos);
+            }
+
+
+            bool prepareBurnout = entity.AllEparams.Any(e => e.ticksBeforeBurnout > 0);
+            if (prepareBurnout)
+            {
+                switch (entity.Block.Variant["tier"])
+                {
+                    case "tier1":
+                        ParticleManager.SpawnWhiteSlowSmoke(this.Api.World, Pos.ToVec3d().Add(0.1, 0, 0.1));
+                        break;
+                    case "tier2":
+                        ParticleManager.SpawnWhiteSlowSmoke(this.Api.World, Pos.ToVec3d().Add(0.1, 1.0, 0.1));
+                        break;
+                }
+
             }
         }
 

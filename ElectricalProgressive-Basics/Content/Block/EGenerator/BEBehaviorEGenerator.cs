@@ -201,7 +201,7 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
         {
             var hasBurnout = entity.AllEparams.Any(e => e.burnout);
             if (hasBurnout)
-                ParticleManager.SpawnBlackSmoke(Api.World, Pos.ToVec3d().Add(0.5, 0.5, 0.5));
+                ParticleManager.SpawnBlackSmoke(Api.World, Pos.ToVec3d().Add(0.1, 0, 0.1));
 
             if (hasBurnout && entity.Block.Variant["type"] != "burned")
             {
@@ -209,6 +209,12 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
                 var variant = "burned";
 
                 Api.World.BlockAccessor.ExchangeBlock(Api.World.GetBlock(Block.CodeWithVariant(type, variant)).BlockId, Pos);
+            }
+
+            bool prepareBurnout = entity.AllEparams.Any(e => e.ticksBeforeBurnout > 0);
+            if (prepareBurnout)
+            {
+                ParticleManager.SpawnWhiteSlowSmoke(this.Api.World, Pos.ToVec3d().Add(0.1, 0, 0.1));
             }
         }
 
