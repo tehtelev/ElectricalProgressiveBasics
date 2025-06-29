@@ -3,6 +3,7 @@ using ElectricalProgressive.Content.Block.EConnector;
 using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using Newtonsoft.Json;
+using System;
 using System.Linq;
 using System.Text;
 using Vintagestory.API.Client;
@@ -270,6 +271,12 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         // получаем информацию о сети
         var networkInformation = this.System?.GetNetworks(this.Blockentity.Pos, selectedFacing, methodForInformation);
 
+        // если нет информации о сети, то просто выходим
+        if (networkInformation is null)
+        {
+            return;
+        }
+
         //отслеживаем состояние кнопки для подробностей
         var capi = (ICoreClientAPI)Api;
         var altPressed = capi.Input.IsHotKeyPressed("AltPressForNetwork");
@@ -280,6 +287,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             stringBuilder.AppendLine(Lang.Get("Press") + " " + nameAltPressed + " " + Lang.Get("for details"));
             return;
         }
+
 
         stringBuilder.AppendLine(Lang.Get("Electricity"));
         stringBuilder.AppendLine("├ " + Lang.Get("Consumers") + ": " + networkInformation?.NumberOfConsumers);
@@ -292,11 +300,11 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         stringBuilder.AppendLine("└ " + Lang.Get("Request") + ": " + networkInformation?.Request + " " + Lang.Get("W"));
 
         float capacity = (float)((networkInformation?.MaxCapacity == 0f) ? 0f : (networkInformation?.Capacity * 100.0F / networkInformation?.MaxCapacity));
-        stringBuilder.AppendLine("└ " + Lang.Get("Capacity") + ": " + capacity + " %");
+        stringBuilder.AppendLine("└ " + Lang.Get("Capacity") + ": " + capacity.ToString("F3") + " %");
 
         stringBuilder.AppendLine(Lang.Get("Block"));
         stringBuilder.AppendLine("├ " + Lang.Get("Max. current") + ": " + networkInformation?.eParamsInNetwork.maxCurrent * networkInformation?.eParamsInNetwork.lines + " " + Lang.Get("A"));
-        stringBuilder.AppendLine("├ " + Lang.Get("Current") + ": " + networkInformation?.current + " " + Lang.Get("A"));
+        stringBuilder.AppendLine("├ " + Lang.Get("Current") + ": " + Math.Abs(networkInformation.current).ToString("F3") + " " + Lang.Get("A"));
 
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is BlockEntityECable) //если кабель!
         {
