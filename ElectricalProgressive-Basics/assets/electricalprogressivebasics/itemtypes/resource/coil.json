@@ -1,4 +1,4 @@
-{
+﻿{
 	"code": "coil",
 	"maxstacksize": 64,
 	"attributes": {
@@ -6,10 +6,12 @@
 		"shelvable": true,
 		"handbook": {
 			"groupBy": [ "coil-*" ],
-			"extraSections": [{
-				"title": "electricalprogressivebasics:item-handbooktitle-coil",
-				"text": "electricalprogressivebasics:item-handbooktext-coil"
-            }]
+			"extraSections": [
+				{
+					"title": "electricalprogressivebasics:item-handbooktitle-coil",
+					"text": "electricalprogressivebasics:item-handbooktext-coil"
+				}
+			]
 		}
 	},
 	"materialDensity": 8960,
@@ -22,14 +24,20 @@
 		"general": [ "*" ],
 		"electricity": [ "*" ]
 	},
+	"dimensions": {
+		"width": 0.0625,
+		"height": 0.0625,
+		"length": 0.0625
+	},
 	"combustibleProps": {
 		"meltingPoint": 1084,
 		"meltingDuration": 30,
-		"smeltedRatio": 1,
+		"smeltingType": "bake",
+		"requiresContainer": true,
+		"smeltedRatio": 8,
 		"smeltedStack": {
 			"type": "item",
-			"code": "game:metalbit-copper",
-			"stacksize": 2
+			"code": "game:ingot-copper"
 		}
 	},
 	"guiTransform": {
