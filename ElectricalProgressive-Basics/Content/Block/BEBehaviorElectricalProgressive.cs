@@ -258,7 +258,10 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
                     if (cause is not null)
                     {
-                        stringBuilder.AppendLine(Lang.Get("Burned") + " " + cause);
+                        if (part.eparams[faceIndex].burnout)
+                            stringBuilder.AppendLine(Lang.Get("Burned"));
+
+                        stringBuilder.AppendLine(cause);
                         break;
                     }
                 }

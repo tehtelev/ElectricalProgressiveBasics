@@ -580,14 +580,12 @@ namespace ElectricalProgressive.Content.Block.ECable
             {
                 var key = CacheDataKey.FromEntity(entity);
 
-                return CalculateBoxes(
-                        key,
-                        BlockECable.SelectionBoxesCache,
-                        entity
-                    ).Values
+                var boxes = CalculateBoxes(key, BlockECable.SelectionBoxesCache, entity);
+                return boxes.Values.ToArray() // копируем значения
                     .SelectMany(x => x)
                     .Distinct()
                     .ToArray();
+
             }
 
             return base.GetSelectionBoxes(blockAccessor, position);
@@ -606,14 +604,12 @@ namespace ElectricalProgressive.Content.Block.ECable
             {
                 var key = CacheDataKey.FromEntity(entity);
 
-                return CalculateBoxes(
-                        key,
-                        BlockECable.CollisionBoxesCache,
-                        entity
-                    ).Values
+                var boxes = CalculateBoxes(key, BlockECable.CollisionBoxesCache, entity);
+                return boxes.Values.ToArray() // копируем значения
                     .SelectMany(x => x)
                     .Distinct()
                     .ToArray();
+
             }
 
             return base.GetSelectionBoxes(blockAccessor, position);
@@ -1313,7 +1309,7 @@ namespace ElectricalProgressive.Content.Block.ECable
         }
 
         /// <summary>
-        /// Просчет коллайдеров (колллизии проводов должны совпадать с коллизиями выделения)
+        /// Просчет коллайдеров (коллизии проводов должны совпадать с коллизиями выделения)
         /// </summary>
         /// <param name="key"></param>
         /// <param name="boxesCache"></param>
