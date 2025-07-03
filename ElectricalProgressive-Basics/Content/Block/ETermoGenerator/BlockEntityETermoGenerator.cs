@@ -129,7 +129,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     {
         get
         {
-            var envTemp = EnvironmentTemperature(); //температура окружающей среды
+            int envTemp = EnvironmentTemperature(); //температура окружающей среды
             if (kpd > 0)
             {
                 if (genTemp <= envTemp) //окружающая среда теплее? 
@@ -149,7 +149,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     /// <summary>
     /// КПД генератора в долях
     /// </summary>
-    private float kpd = 0f;
+    public float kpd = 0f;
 
     /// <summary>
     /// Горизонтальные направления для смещения
@@ -164,7 +164,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     /// <summary>
     /// Сколько термопластин установлено в генераторе по высоте
     /// </summary>
-    public int heightTermoplastin;
+    public int heightTermoplastin = 0;
 
     /// <summary>
     /// Стак дял топлива в генераторе
@@ -322,6 +322,8 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     }
 
 
+
+
     /// <summary>
     /// Получает температуру окружающей среды
     /// </summary>
@@ -330,6 +332,9 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     {
         return (int)this.Api.World.BlockAccessor.GetClimateAt(this.Pos, EnumGetClimateMode.ForSuppliedDate_TemperatureOnly, this.Api.World.Calendar.TotalDays).Temperature;
     }
+
+
+
 
     /// <summary>
     /// Вызывается при выгрузке блока
@@ -495,7 +500,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     /// <summary>
     /// Расчет КПД генератора
     /// </summary>
-    public void Calculate_kpd()
+    private void Calculate_kpd()
     {
         // Получаем доступ к блочным данным один раз
         var accessor = this.Api.World.BlockAccessor;
@@ -535,7 +540,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     /// <summary>
     /// Проверяет, можно ли сжечь топливо в генераторе
     /// </summary>
-    public void CanDoBurn()
+    private void CanDoBurn()
     {
         CombustibleProperties fuelProps = FuelSlot.Itemstack?.Collectible.CombustibleProps;
         if (fuelProps == null)
@@ -567,7 +572,7 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     /// <param name="toTemp"></param>
     /// <param name="deltaTime"></param>
     /// <returns></returns>
-    public float ChangeTemperature(float fromTemp, float toTemp, float deltaTime)
+    private float ChangeTemperature(float fromTemp, float toTemp, float deltaTime)
     {
         float diff = Math.Abs(fromTemp - toTemp);
         deltaTime += deltaTime * (diff / 28f);

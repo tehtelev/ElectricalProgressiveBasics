@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using ElectricalProgressive.Content.Block.EGenerator;
 using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent.Mechanics;
 
 namespace ElectricalProgressive.Content.Block.ETermoGenerator;
 
@@ -56,7 +54,7 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
             }
 
 
-         }
+        }
 
         //Blockentity.MarkDirty(true); //обновлять здесь уже лишнее
     }
@@ -113,6 +111,8 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
 
         stringBuilder.AppendLine(StringHelper.Progressbar(Math.Min(PowerGive, PowerOrder) / entity.Power * 100));
         stringBuilder.AppendLine("└ " + Lang.Get("Production") + ": " + ((int)Math.Min(PowerGive, PowerOrder)).ToString() + "/" + ((int)entity.Power).ToString() + " " + Lang.Get("W"));
+        stringBuilder.AppendLine("└ " + Lang.Get("electricalprogressivebasics:block-termoplastini") + ": " + entity.heightTermoplastin);
+        stringBuilder.AppendLine("└ " + Lang.Get("kpd") + ": " + (entity.kpd*100).ToString("F1")+ " %");
     }
 
 

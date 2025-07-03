@@ -246,7 +246,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             {
                 var faceIndex = face.Index;
 
-                if (part.eparams[faceIndex].burnout)
+                if (part.eparams[faceIndex].burnout || part.eparams[faceIndex].ticksBeforeBurnout>0) // показываем причину сгорания, когда горит и когда уже сгорело
                 {
                     string cause = part.eparams[faceIndex].causeBurnout switch
                     {
@@ -279,8 +279,8 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
         //отслеживаем состояние кнопки для подробностей
         var capi = (ICoreClientAPI)Api;
-        var altPressed = capi.Input.IsHotKeyPressed("AltPressForNetwork");
-        var nameAltPressed = capi.Input.GetHotKeyByCode("AltPressForNetwork").CurrentMapping.ToString();
+        bool altPressed = capi.Input.IsHotKeyPressed("AltPressForNetwork");
+        string nameAltPressed = capi.Input.GetHotKeyByCode("AltPressForNetwork").CurrentMapping.ToString();
 
         if (!altPressed)
         {
@@ -319,7 +319,10 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
 
 
-
+    /// <summary>
+    /// Сохраняет в дерево атрибутов
+    /// </summary>
+    /// <param name="tree"></param>
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);
@@ -332,16 +335,20 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     }
 
 
-
+    /// <summary>
+    /// Считывает из дерева атрибутов
+    /// </summary>
+    /// <param name="tree"></param>
+    /// <param name="worldAccessForResolve"></param>
     public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
     {
         base.FromTreeAttributes(tree, worldAccessForResolve);
 
-        var connection = SerializerUtil.Deserialize<Facing>(tree.GetBytes(ConnectionKey));
-        var interruption = SerializerUtil.Deserialize<Facing>(tree.GetBytes(InterruptionKey));
+        Facing connection = SerializerUtil.Deserialize<Facing>(tree.GetBytes(ConnectionKey));
+        Facing interruption = SerializerUtil.Deserialize<Facing>(tree.GetBytes(InterruptionKey));
 
         //массив массивов приходится считывать через newtonsoftjson
-        var AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes(BlockEntityEBase.AllEparamsKey)));
+        EParams[] AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes(BlockEntityEBase.AllEparamsKey)));
 
         if (connection == this.connection && interruption == this.interruption)
             return;
