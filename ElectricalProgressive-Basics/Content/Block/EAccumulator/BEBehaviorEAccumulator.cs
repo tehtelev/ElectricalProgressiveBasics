@@ -17,15 +17,36 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     {
     }
 
+
+    /// <summary>
+    /// Инициализация поведения блока
+    /// </summary>
+    /// <param name="api"></param>
+    /// <param name="properties"></param>
+    public override void Initialize(ICoreAPI api, JsonObject properties)
+    {
+        base.Initialize(api, properties);
+    }
+
+    /// <summary>
+    /// Вызывается при выгрузке блока из мира
+    /// </summary>
+    public override void OnBlockUnloaded()
+    {
+        base.OnBlockUnloaded();
+    }
+
+
+
     public bool IsBurned => this.Block.Variant["state"] == "burned";
 
     /// <summary>
-    /// предыдущее значение емкости
+    /// Предыдущее значение емкости
     /// </summary>
     public float LastCapacity { get; set; }
 
     /// <summary>
-    /// текущая емкость (сохраняется)
+    /// Текущая емкость (сохраняется)
     /// </summary>
     public float Capacity { get; set; }
 
@@ -38,9 +59,11 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     public new BlockPos Pos => this.Blockentity.Pos;
 
     /// <summary>
-    /// мощность батареи!!!!!!!
+    /// Мощность батареи!
     /// </summary>
     public float power => MyMiniLib.GetAttributeFloat(this.Block, "power", 128.0F);
+
+
 
     public float GetMaxCapacity()
     {
@@ -92,6 +115,7 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     {
         return Math.Min(Capacity, power);
     }
+
 
     public float GetLastCapacity()
     {

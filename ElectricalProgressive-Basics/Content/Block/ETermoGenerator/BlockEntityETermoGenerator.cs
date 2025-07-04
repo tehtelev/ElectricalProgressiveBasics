@@ -336,6 +336,8 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
 
 
 
+
+
     /// <summary>
     /// Вызывается при выгрузке блока
     /// </summary>
@@ -344,6 +346,8 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
         base.OnBlockUnloaded();
 
         MeshData.Clear(); //не забываем очищать кэш мэша при выгрузке блока
+
+        this.ElectricalProgressive?.OnBlockUnloaded(); // вызываем метод OnBlockUnloaded у BEBehaviorElectricalProgressive
 
         // закрываем диалоговое окно, если оно открыто
         if (this.Api is ICoreClientAPI && this.clientDialog != null)

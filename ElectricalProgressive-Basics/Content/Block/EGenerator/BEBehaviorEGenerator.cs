@@ -64,6 +64,29 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
 
     protected CompositeShape? CompositeShape;  //не трогать уровни доступа
 
+
+
+    /// <summary>
+    /// Инициализация поведения блока
+    /// </summary>
+    /// <param name="api"></param>
+    /// <param name="properties"></param>
+    public override void Initialize(ICoreAPI api, JsonObject properties)
+    {
+        base.Initialize(api, properties);
+    }
+
+    /// <summary>
+    /// Вызывается при выгрузке блока из мира
+    /// </summary>
+    public override void OnBlockUnloaded()
+    {
+        base.OnBlockUnloaded();
+        CompositeShape = null;
+    }
+
+
+
     public new BlockPos Pos => Position;
 
     public override BlockFacing OutFacingForNetworkDiscovery
@@ -221,11 +244,7 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
         Blockentity.MarkDirty(true);
     }
 
-    public override void OnBlockUnloaded()
-    {
-        base.OnBlockUnloaded();
-        CompositeShape = null;
-    }
+
 
     public override void ToTreeAttributes(ITreeAttribute tree)
     {

@@ -17,17 +17,24 @@ namespace ElectricalProgressive.Content.Block;
 
 public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 {
+    public const string InterruptionKey = "electricalprogressive:interruption";
+    public const string ConnectionKey = "electricalprogressive:connection";
+    public const string IsLoadedKey = "electricalprogressive:isloaded";
+
     private IElectricAccumulator? accumulator;
     private IElectricConsumer? consumer;
     private IElectricConductor? conductor;
     private IElectricProducer? producer;
     private IElectricTransformator? transformator;
 
+
     private Facing connection;
+    private Facing interruption;
+    private bool isLoaded;
 
     private bool dirty = true;
     private bool paramsSet = false;
-    private Facing interruption;
+
 
     public EParams eparams;
     public int eparamsFace;
@@ -58,7 +65,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         }
     }
 
-    public const string ConnectionKey = "electricalprogressive:connection";
+
 
     public EParams[] AllEparams
     {
@@ -69,7 +76,6 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             {
                 this.allEparams = value;
                 this.dirty = true;
-                //this.paramsSet = false;
                 this.Update();
             }
         }
@@ -106,12 +112,21 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         }
     }
 
-    public const string InterruptionKey = "electricalprogressive:interruption";
 
+
+
+    /// <summary>
+    /// Инициализация поведения электрического блока
+    /// </summary>
+    /// <param name="api"></param>
+    /// <param name="properties"></param>
     public override void Initialize(ICoreAPI api, JsonObject properties)
     {
         base.Initialize(api, properties);
-        this.Update();
+
+        this.isLoaded = true;   // оно загрузилось!
+        this.dirty = true;
+        this.Update();          // обновляем систему, чтобы она знала, что блок загрузился
     }
 
     /// <summary>
@@ -158,12 +173,14 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
                 case IElectricTransformator { } transformator:
                     this.transformator = transformator;
                     break;
+
                 case IElectricConductor { } conductor:
                     this.conductor = conductor;
                     break;
             }
         }
 
+        // задаются все поведения
         system.SetConductor(this.Blockentity.Pos, this.conductor);
         system.SetConsumer(this.Blockentity.Pos, this.consumer);
         system.SetProducer(this.Blockentity.Pos, this.producer);
@@ -178,18 +195,36 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             Epar = Eparams;
 
 
-        if (system.Update(this.Blockentity.Pos, this.connection & ~this.interruption, Epar, ref this.allEparams))
+        if (system.Update(this.Blockentity.Pos, this.connection & ~this.interruption, Epar, ref this.allEparams, isLoaded))
         {
             this.Blockentity.MarkDirty(true);
         }
     }
 
 
+
+    /// <summary>
+    /// Вызывается, когда блок удаляется из мира
+    /// </summary>
     public override void OnBlockRemoved()
     {
         base.OnBlockRemoved();
         this.System?.Remove(this.Blockentity.Pos);
     }
+
+
+
+    /// <summary>
+    /// Вызывается, когда блок выгружается из мира
+    /// </summary>
+    public override void OnBlockUnloaded()
+    {
+        base.OnBlockUnloaded();
+        this.isLoaded = false;  // оно выгрузилось!
+        this.dirty = true;
+        this.Update();          // обновляем систему, чтобы она знала, что блок выгрузился
+    }
+
 
 
     /// <summary>
@@ -203,7 +238,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         var selectedFacing = Facing.None;
 
         var entity = this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos); // получаем блок-энитити, чтобы получить информацию о нем
-        string methodForInformation=""; //метод получения информации о сети, в зависимости от типа блока-энитити
+        string methodForInformation = ""; //метод получения информации о сети, в зависимости от типа блока-энитити
 
         //если это кабель, то мы можем вывести только информацию о сети на одной грани
         if (entity is BlockEntityECable blockEntityECable && entity is not BlockEntityEConnector && blockEntityECable.AllEparams != null)
@@ -223,7 +258,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
                 methodForInformation = "thisFace"; // только указанную грань
 
-                
+
             }
         }
         else if (entity is BlockEntityEConnector blockEntityEConnector && blockEntityEConnector.AllEparams != null) //если это мет блок
@@ -246,7 +281,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             {
                 var faceIndex = face.Index;
 
-                if (part.eparams[faceIndex].burnout || part.eparams[faceIndex].ticksBeforeBurnout>0) // показываем причину сгорания, когда горит и когда уже сгорело
+                if (part.eparams[faceIndex].burnout || part.eparams[faceIndex].ticksBeforeBurnout > 0) // показываем причину сгорания, когда горит и когда уже сгорело
                 {
                     string cause = part.eparams[faceIndex].causeBurnout switch
                     {
@@ -332,11 +367,14 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
         tree.SetBytes(ConnectionKey, SerializerUtil.Serialize(this.connection));
         tree.SetBytes(InterruptionKey, SerializerUtil.Serialize(this.interruption));
+        tree.SetBytes(IsLoadedKey, SerializerUtil.Serialize(this.isLoaded));
 
         //массив массивов приходится сохранять через newtonsoftjson
         tree.SetBytes(BlockEntityEBase.AllEparamsKey, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.allEparams)));
     }
 
+
+    private byte[] falseBytes = SerializerUtil.Serialize(false);
 
     /// <summary>
     /// Считывает из дерева атрибутов
@@ -349,17 +387,29 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
         Facing connection = SerializerUtil.Deserialize<Facing>(tree.GetBytes(ConnectionKey));
         Facing interruption = SerializerUtil.Deserialize<Facing>(tree.GetBytes(InterruptionKey));
+        bool isLoaded = SerializerUtil.Deserialize<bool>(tree.GetBytes(IsLoadedKey, falseBytes));
 
         //массив массивов приходится считывать через newtonsoftjson
         EParams[] AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes(BlockEntityEBase.AllEparamsKey)));
 
-        if (connection == this.connection && interruption == this.interruption)
+        // возможно дешевле сравнить все значения, чем обновить цепь, но это не точно
+        if (connection == this.connection &&
+            interruption == this.interruption &&
+            isLoaded == this.isLoaded &&
+            AllEparamss.SequenceEqual(this.allEparams))
+        {
             return;
+        }
+
 
         this.interruption = interruption;
+        this.isLoaded = isLoaded;
         this.connection = connection;
         this.allEparams = AllEparamss!;
         this.dirty = true;
         this.Update();
     }
+
+
+  
 }

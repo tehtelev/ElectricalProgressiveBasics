@@ -19,6 +19,7 @@ public class BlockEGenerator : BlockEBase, IMechanicalPowerBlock
     {
         base.OnUnloaded(api);
         MeshData.Clear();
+
     }
 
     public MechanicalNetwork? GetNetwork(IWorldAccessor world, BlockPos pos)

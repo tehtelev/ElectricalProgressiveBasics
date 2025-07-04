@@ -38,4 +38,12 @@ public abstract class BlockEntityEBase : BlockEntity
     }
 
     public const string AllEparamsKey = "electricalprogressive:allEparams";
+
+    
+    public override void OnBlockUnloaded()
+    {
+        base.OnBlockUnloaded();
+        this.ElectricalProgressive?.OnBlockUnloaded(); // вызываем метод OnBlockUnloaded у BEBehaviorElectricalProgressive
+    }
+    
 }
