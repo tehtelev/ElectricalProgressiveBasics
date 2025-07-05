@@ -367,14 +367,17 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
         tree.SetBytes(ConnectionKey, SerializerUtil.Serialize(this.connection));
         tree.SetBytes(InterruptionKey, SerializerUtil.Serialize(this.interruption));
-        tree.SetBytes(IsLoadedKey, SerializerUtil.Serialize(this.isLoaded));
+        tree.SetBool(IsLoadedKey, this.isLoaded);
 
-        //массив массивов приходится сохранять через newtonsoftjson
-        tree.SetBytes(BlockEntityEBase.AllEparamsKey, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(this.allEparams)));
+        // Сохраняем флаг формата (например, "binary" или "json")
+        tree.SetString("SerializationFormat", "binary");
+
+        // Используем пользовательскую бинарную сериализацию
+        tree.SetBytes(BlockEntityEBase.AllEparamsKey, EParamsSerializer.Serialize(this.allEparams));
     }
 
 
-    private byte[] falseBytes = SerializerUtil.Serialize(false);
+
 
     /// <summary>
     /// Считывает из дерева атрибутов
@@ -387,12 +390,25 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
         Facing connection = SerializerUtil.Deserialize<Facing>(tree.GetBytes(ConnectionKey));
         Facing interruption = SerializerUtil.Deserialize<Facing>(tree.GetBytes(InterruptionKey));
-        bool isLoaded = SerializerUtil.Deserialize<bool>(tree.GetBytes(IsLoadedKey, falseBytes));
 
-        //массив массивов приходится считывать через newtonsoftjson
-        EParams[] AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes(BlockEntityEBase.AllEparamsKey)));
+        bool isLoaded = tree.GetBool(IsLoadedKey, false);
 
-        // возможно дешевле сравнить все значения, чем обновить цепь, но это не точно
+        // Проверяем флаг формата
+        string format = tree.GetString("SerializationFormat", "json"); // По умолчанию "json", если флаг отсутствует
+
+        EParams[] AllEparamss;
+        if (format == "binary")
+        {
+            // Используем бинарную десериализацию
+            AllEparamss = EParamsSerializer.Deserialize(tree.GetBytes(BlockEntityEBase.AllEparamsKey));
+        }
+        else
+        {
+            // Используем Newtonsoft.Json для старых данных
+            AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes(BlockEntityEBase.AllEparamsKey)));
+        }
+
+        // Проверяем, изменились ли данные
         if (connection == this.connection &&
             interruption == this.interruption &&
             isLoaded == this.isLoaded &&
@@ -401,15 +417,14 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             return;
         }
 
-
         this.interruption = interruption;
         this.isLoaded = isLoaded;
         this.connection = connection;
-        this.allEparams = AllEparamss!;
+        this.allEparams = AllEparamss;
         this.dirty = true;
         this.Update();
     }
 
 
-  
+
 }

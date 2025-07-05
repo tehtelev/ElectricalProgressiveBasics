@@ -3,7 +3,14 @@
     "file": "game:blocktypes/metal/metalblock",
     "path": "/entityBehaviors",
     "op": "add",
-    "value": [{"name":  "ElectricalProgressive"}]
+    "value": [
+      {
+        "name": "BEBehaviorECable"
+      },
+      {
+        "name": "ElectricalProgressive"
+      }
+    ]
   },
   {
     "file": "game:blocktypes/metal/metalblock",

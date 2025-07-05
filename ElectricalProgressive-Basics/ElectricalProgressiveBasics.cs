@@ -10,7 +10,6 @@ using ElectricalProgressive.Content.Block.ECable;
 using ElectricalProgressive.Content.Block.ETransformator;
 using ElectricalProgressive.Content.Block.ETermoGenerator;
 using ElectricalProgressive.Content.Block.Termoplastini;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using System.Collections.Generic;
 
@@ -78,7 +77,7 @@ public class ElectricalProgressiveBasics : ModSystem
 
         api.RegisterBlockClass("BlockConnector", typeof(BlockConnector));
         api.RegisterBlockEntityClass("BlockEntityEConnector", typeof(BlockEntityEConnector));
-
+        api.RegisterBlockEntityBehaviorClass("BEBehaviorEConnector", typeof(BEBehaviorEConnector));
 
 
         api.RegisterBlockClass("BlockETransformator", typeof(BlockETransformator));

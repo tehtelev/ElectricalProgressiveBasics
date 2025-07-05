@@ -64,17 +64,17 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
 
     protected CompositeShape? CompositeShape;  //не трогать уровни доступа
 
-
-
-    /// <summary>
-    /// Инициализация поведения блока
-    /// </summary>
-    /// <param name="api"></param>
-    /// <param name="properties"></param>
-    public override void Initialize(ICoreAPI api, JsonObject properties)
+    private static readonly int[][] _axisSigns =
     {
-        base.Initialize(api, properties);
-    }
+        new[] { +0, +0, -1 }, // index 0
+        new[] { -1, +0, +0 }, // index 1
+        new[] { +0, +0, -1 }, // index 2
+        new[] { -1, +0, +0 }, // index 3
+        new[] { +0, -1, +0 }, // index 4
+        new[] { +0, +1, +0 }  // index 5
+    };
+
+
 
     /// <summary>
     /// Вызывается при выгрузке блока из мира
@@ -89,57 +89,48 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
 
     public new BlockPos Pos => Position;
 
+    private BlockFacing _outFacingForNetworkDiscovery = null;
+    private int[] _axisSign=null;
+
+
     public override BlockFacing OutFacingForNetworkDiscovery
     {
         get
         {
-            if (Blockentity is BlockEntityEGenerator entity && entity.Facing != Facing.None)
-                return FacingHelper.Directions(entity.Facing).First();
+            if (_outFacingForNetworkDiscovery == null)
+            {
+                if (Blockentity is BlockEntityEGenerator entity && entity.Facing != Facing.None)
+                    _outFacingForNetworkDiscovery=FacingHelper.Directions(entity.Facing).First();
+                else
+                    _outFacingForNetworkDiscovery = BlockFacing.NORTH; // fallback to default direction if not set
+            }
 
-            return BlockFacing.NORTH;
+            return _outFacingForNetworkDiscovery;
         }
     }
 
-    public override int[] AxisSign => OutFacingForNetworkDiscovery.Index switch
+
+    
+    /// <summary>
+    /// Возвращает направление оси, в которой находится генератор
+    /// </summary>
+    public override int[] AxisSign
     {
-        0 => new[]
+        get
         {
-            +0,
-            +0,
-            -1
-        },
-        1 => new[]
-        {
-            -1,
-            +0,
-            +0
-        },
-        2 => new[]
-        {
-            +0,
-            +0,
-            -1
-        },
-        3 => new[]
-        {
-            -1,
-            +0,
-            +0
-        },
-        4 => new[]
-        {
-            +0,
-            -1,
-            +0
-        },
-        5 => new[]
-        {
-            +0,
-            +1,
-            +0
-        },
-        _ => AxisSign
-    };
+            if (_axisSign == null)
+            {
+                int index = OutFacingForNetworkDiscovery.Index;
+                _axisSign=(index >= 0 && index < _axisSigns.Length)
+                    ? _axisSigns[index]
+                    : _axisSigns[0]; // fallback to default
+            }
+
+            return _axisSign;
+        }
+    }
+    
+
 
     /// <inheritdoc />
     public BEBehaviorEGenerator(BlockEntity blockEntity) : base(blockEntity)
