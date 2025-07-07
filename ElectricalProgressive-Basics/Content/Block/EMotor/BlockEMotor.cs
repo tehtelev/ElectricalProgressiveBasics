@@ -34,7 +34,7 @@ public class BlockEMotor : BlockEBase, IMechanicalPowerBlock
     {
         if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEMotor entity && entity.Facing != null && entity.Facing != Facing.None)
         {
-            var directions = FacingHelper.Directions(entity.Facing);
+            var directions = FacingHelper.Directions(entity.Facing).ToList();
             if (directions.Any())
             {
                 return directions.First() == face;
@@ -155,7 +155,7 @@ public class BlockEMotor : BlockEBase, IMechanicalPowerBlock
 
         if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEMotor entity)
         {
-            var faces = FacingHelper.Faces(entity.Facing);
+            var faces = FacingHelper.Faces(entity.Facing).ToList();
             if (
             faces != null &&
             faces.Any() &&

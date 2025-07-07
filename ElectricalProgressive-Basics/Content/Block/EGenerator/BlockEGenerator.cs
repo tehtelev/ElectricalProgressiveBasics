@@ -152,7 +152,7 @@ public class BlockEGenerator : BlockEBase, IMechanicalPowerBlock
 
         if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityEGenerator entity)
         {
-            var faces = FacingHelper.Faces(entity.Facing);
+            var faces = FacingHelper.Faces(entity.Facing).ToList();
             if (
             faces != null &&
             faces.Any() &&

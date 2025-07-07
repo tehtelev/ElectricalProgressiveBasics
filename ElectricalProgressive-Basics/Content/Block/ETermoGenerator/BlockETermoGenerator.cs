@@ -144,7 +144,7 @@ public class BlockETermoGenerator : BlockEBase
 
         if (world.BlockAccessor.GetBlockEntity(pos) is BlockEntityETermoGenerator entity)
         {
-            var faces = FacingHelper.Faces(entity.Facing);
+            var faces = FacingHelper.Faces(entity.Facing).ToList();
             if (
             faces != null &&
             faces.Any() &&

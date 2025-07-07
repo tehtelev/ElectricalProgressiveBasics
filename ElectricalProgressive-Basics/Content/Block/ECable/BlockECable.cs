@@ -316,7 +316,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             // тут ломаем переключатель
             if (selectedSwitches != Facing.None)
             {
-                var switchesStackSize = FacingHelper.Faces(selectedSwitches).Count();
+                var switchesStackSize = FacingHelper.Faces(selectedSwitches).ToList().Count();
                 if (switchesStackSize > 0)
                 {
                     entity.Orientation &= ~faceSelect;
@@ -474,7 +474,7 @@ namespace ElectricalProgressive.Content.Block.ECable
             var selectedSwitches = entity.Switches & selectedFacing;
             if (selectedSwitches != Facing.None)
             {
-                var switchStackSize = FacingHelper.Faces(selectedSwitches).Count();
+                var switchStackSize = FacingHelper.Faces(selectedSwitches).ToList().Count();
                 if (switchStackSize > 0)
                 {
                     var assetLocation = new AssetLocation("electricalprogressivebasics:switch-enabled");
@@ -655,11 +655,12 @@ namespace ElectricalProgressive.Content.Block.ECable
                     // рисуем на северной грани
                     if ((key.Connection & Facing.NorthAll) != 0)
                     {
-                        var indexV = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].voltage; //индекс напряжения этой грани
-                        var material = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].material; //индекс материала этой грани
-                        var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].lines; //индекс линий этой грани
-                        var indexB = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].burnout;//индекс перегорания этой грани
-                        var isol = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].isolated; //изолировано ли?
+                        var bufIndex = FacingHelper.Faces(Facing.NorthAll).First().Index; //индекс грани
+                        var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                        var material = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                        var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                        var indexB = entity.AllEparams[bufIndex].burnout;//индекс перегорания этой грани
+                        var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
                         var dotVariant = new BlockVariants(api, entity.Block, indexV, material, indexQ, isol ? 7 : 0);   //получаем шейп нужной точки кабеля
 
@@ -707,11 +708,12 @@ namespace ElectricalProgressive.Content.Block.ECable
                     // рисуем на восточной грани
                     if ((key.Connection & Facing.EastAll) != 0)
                     {
-                        var indexV = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].voltage; //индекс напряжения этой грани
-                        var indexM = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].material; //индекс материала этой грани
-                        var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].lines; //индекс линий этой грани
-                        var indexB = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].burnout; //индекс перегорания этой грани
-                        var isol = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].isolated; //изолировано ли?
+                        var bufIndex = FacingHelper.Faces(Facing.EastAll).First().Index; //индекс грани
+                        var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                        var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                        var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                        var indexB = entity.AllEparams[bufIndex].burnout; //индекс перегорания этой грани
+                        var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
                         var dotVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 7 : 0);   //получаем шейп нужной точки кабеля
 
@@ -757,11 +759,12 @@ namespace ElectricalProgressive.Content.Block.ECable
                     // рисуем на южной грани
                     if ((key.Connection & Facing.SouthAll) != 0)
                     {
-                        var indexV = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].voltage; //индекс напряжения этой грани
-                        var indexM = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].material; //индекс материала этой грани
-                        var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].lines; //индекс линий этой грани
-                        var indexB = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].burnout; //индекс перегорания этой грани
-                        var isol = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].isolated; //изолировано ли?
+                        var bufIndex = FacingHelper.Faces(Facing.SouthAll).First().Index; //индекс грани
+                        var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                        var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                        var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                        var indexB = entity.AllEparams[bufIndex].burnout; //индекс перегорания этой грани
+                        var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
                         var dotVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 7 : 0);   //получаем шейп нужной точки кабеля
 
@@ -807,11 +810,12 @@ namespace ElectricalProgressive.Content.Block.ECable
                     // рисуем на западной грани
                     if ((key.Connection & Facing.WestAll) != 0)
                     {
-                        var indexV = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].voltage; //индекс напряжения этой грани
-                        var indexM = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].material; //индекс материала этой грани
-                        var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].lines; //индекс линий этой грани
-                        var indexB = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].burnout; //индекс перегорания этой грани
-                        var isol = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].isolated; //изолировано ли?
+                        var bufIndex = FacingHelper.Faces(Facing.WestAll).First().Index; //индекс грани
+                        var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                        var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                        var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                        var indexB = entity.AllEparams[bufIndex].burnout; //индекс перегорания этой грани
+                        var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
                         var dotVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 7 : 0);   //получаем шейп нужной точки кабеля
 
@@ -857,11 +861,12 @@ namespace ElectricalProgressive.Content.Block.ECable
                     // рисуем на верхней грани
                     if ((key.Connection & Facing.UpAll) != 0)
                     {
-                        var indexV = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].voltage; //индекс напряжения этой грани
-                        var indexM = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].material; //индекс материала этой грани
-                        var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].lines; //индекс линий этой грани
-                        var indexB = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].burnout; //индекс перегорания этой грани
-                        var isol = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].isolated; //изолировано ли?
+                        var bufIndex = FacingHelper.Faces(Facing.UpAll).First().Index; //индекс грани
+                        var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                        var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                        var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                        var indexB = entity.AllEparams[bufIndex].burnout; //индекс перегорания этой грани
+                        var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
                         var dotVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 7 : 0);   //получаем шейп нужной точки кабеля
 
@@ -907,11 +912,12 @@ namespace ElectricalProgressive.Content.Block.ECable
                     // рисуем на нижней грани
                     if ((key.Connection & Facing.DownAll) != 0)
                     {
-                        var indexV = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].voltage; //индекс напряжения этой грани
-                        var indexM = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].material; //индекс материала этой грани
-                        var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].lines; //индекс линий этой грани
-                        var indexB = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].burnout; //индекс перегорания этой грани
-                        var isol = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].isolated; //изолировано ли?
+                        var bufIndex = FacingHelper.Faces(Facing.DownAll).First().Index; //индекс грани
+                        var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                        var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                        var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                        var indexB = entity.AllEparams[bufIndex].burnout; //индекс перегорания этой грани
+                        var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
                         var dotVariant = new BlockVariants(api, entity.Block, indexV, indexM, indexQ, isol ? 7 : 0);   //получаем шейп нужной точки кабеля
 
@@ -1326,12 +1332,13 @@ namespace ElectricalProgressive.Content.Block.ECable
                 // Connections
                 if ((key.Connection & Facing.NorthAll) != 0)
                 {
-                    var indexV = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].voltage; //индекс напряжения этой грани
-                    var indexM = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].material; //индекс материала этой грани
-                    var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].lines; //индекс линий этой грани
-                    var indexB = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].burnout;//индекс перегорания этой грани
-                    var isol = entity.AllEparams[FacingHelper.Faces(Facing.NorthAll).First().Index].isolated; //изолировано ли?
-
+                    var bufIndex = FacingHelper.Faces(Facing.NorthAll).First().Index; //индекс грани
+                    var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                    var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                    var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                    var indexB = entity.AllEparams[bufIndex].burnout;//индекс перегорания этой грани
+                    var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
+                    
 
                     Cuboidf[] partBoxes;
                     if (!indexB)
@@ -1373,11 +1380,12 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                 if ((key.Connection & Facing.EastAll) != 0)
                 {
-                    var indexV = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].voltage; //индекс напряжения этой грани
-                    var indexM = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].material; //индекс материала этой грани
-                    var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].lines; //индекс линий этой грани
-                    var indexB = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].burnout;//индекс перегорания этой грани
-                    var isol = entity.AllEparams[FacingHelper.Faces(Facing.EastAll).First().Index].isolated; //изолировано ли?
+                    var bufIndex = FacingHelper.Faces(Facing.EastAll).First().Index; //индекс грани
+                    var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                    var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                    var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                    var indexB = entity.AllEparams[bufIndex].burnout;//индекс перегорания этой грани
+                    var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
 
                     Cuboidf[] partBoxes;
@@ -1417,11 +1425,12 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                 if ((key.Connection & Facing.SouthAll) != 0)
                 {
-                    var indexV = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].voltage; //индекс напряжения этой грани
-                    var indexM = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].material; //индекс материала этой грани
-                    var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].lines; //индекс линий этой грани
-                    var indexB = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].burnout;//индекс перегорания этой грани
-                    var isol = entity.AllEparams[FacingHelper.Faces(Facing.SouthAll).First().Index].isolated; //изолировано ли?
+                    var bufIndex = FacingHelper.Faces(Facing.SouthAll).First().Index; //индекс грани
+                    var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                    var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                    var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                    var indexB = entity.AllEparams[bufIndex].burnout;//индекс перегорания этой грани
+                    var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
 
                     Cuboidf[] partBoxes;
@@ -1463,11 +1472,12 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                 if ((key.Connection & Facing.WestAll) != 0)
                 {
-                    var indexV = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].voltage; //индекс напряжения этой грани
-                    var indexM = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].material; //индекс материала этой грани
-                    var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].lines; //индекс линий этой грани
-                    var indexB = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].burnout;//индекс перегорания этой грани
-                    var isol = entity.AllEparams[FacingHelper.Faces(Facing.WestAll).First().Index].isolated; //изолировано ли?
+                    var bufIndex = FacingHelper.Faces(Facing.WestAll).First().Index; //индекс грани
+                    var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                    var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                    var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                    var indexB = entity.AllEparams[bufIndex].burnout;//индекс перегорания этой грани
+                    var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
 
                     Cuboidf[] partBoxes;
@@ -1509,11 +1519,12 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                 if ((key.Connection & Facing.UpAll) != 0)
                 {
-                    var indexV = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].voltage; //индекс напряжения этой грани
-                    var indexM = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].material; //индекс материала этой грани
-                    var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].lines; //индекс линий этой грани
-                    var indexB = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].burnout;//индекс перегорания этой грани
-                    var isol = entity.AllEparams[FacingHelper.Faces(Facing.UpAll).First().Index].isolated; //изолировано ли?
+                    var bufIndex = FacingHelper.Faces(Facing.UpAll).First().Index; //индекс грани
+                    var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                    var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                    var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                    var indexB = entity.AllEparams[bufIndex].burnout;//индекс перегорания этой грани
+                    var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
 
 
@@ -1556,11 +1567,12 @@ namespace ElectricalProgressive.Content.Block.ECable
 
                 if ((key.Connection & Facing.DownAll) != 0)
                 {
-                    var indexV = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].voltage; //индекс напряжения этой грани
-                    var indexM = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].material; //индекс материала этой грани
-                    var indexQ = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].lines; //индекс линий этой грани
-                    var indexB = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].burnout;//индекс перегорания этой грани
-                    var isol = entity.AllEparams[FacingHelper.Faces(Facing.DownAll).First().Index].isolated; //изолировано ли?
+                    var bufIndex = FacingHelper.Faces(Facing.DownAll).First().Index; //индекс грани
+                    var indexV = entity.AllEparams[bufIndex].voltage; //индекс напряжения этой грани
+                    var indexM = entity.AllEparams[bufIndex].material; //индекс материала этой грани
+                    var indexQ = entity.AllEparams[bufIndex].lines; //индекс линий этой грани
+                    var indexB = entity.AllEparams[bufIndex].burnout;//индекс перегорания этой грани
+                    var isol = entity.AllEparams[bufIndex].isolated; //изолировано ли?
 
 
 
