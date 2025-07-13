@@ -30,7 +30,7 @@ namespace ElectricalProgressive.Content.Block.EConnector
         /// <exception cref="NotImplementedException"></exception>
         public void Update()
         {
-
+           // Blockentity.MarkDirty(true);
         }
 
 

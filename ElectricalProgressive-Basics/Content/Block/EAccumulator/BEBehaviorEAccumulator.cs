@@ -18,23 +18,7 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     }
 
 
-    /// <summary>
-    /// Инициализация поведения блока
-    /// </summary>
-    /// <param name="api"></param>
-    /// <param name="properties"></param>
-    public override void Initialize(ICoreAPI api, JsonObject properties)
-    {
-        base.Initialize(api, properties);
-    }
 
-    /// <summary>
-    /// Вызывается при выгрузке блока из мира
-    /// </summary>
-    public override void OnBlockUnloaded()
-    {
-        base.OnBlockUnloaded();
-    }
 
 
 

@@ -108,7 +108,7 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
         {
             if (_outFacingForNetworkDiscovery == null)
             {
-                if (Blockentity is BlockEntityEGenerator entity && entity.Facing != Facing.None)
+                if (Blockentity is BlockEntityEMotor entity && entity.Facing != Facing.None)
                     _outFacingForNetworkDiscovery = FacingHelper.Directions(entity.Facing).First();
                 else
                     _outFacingForNetworkDiscovery = BlockFacing.NORTH; // fallback to default direction if not set

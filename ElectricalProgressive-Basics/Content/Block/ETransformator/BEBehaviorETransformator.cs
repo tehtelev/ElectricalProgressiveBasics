@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 
 
@@ -13,6 +14,10 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
 {
     float maxCurrent; //максимальный ток
     float power;      //мощность
+
+
+    public const string PowerKey = "electricalprogressive:power";
+
 
     public BEBehaviorETransformator(BlockEntity blockEntity) : base(blockEntity)
     {
@@ -73,7 +78,7 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
 
         }
 
-        this.Blockentity.MarkDirty(true);
+        Blockentity.MarkDirty(true);
     }
 
 
@@ -85,5 +90,20 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
     public void setPower(float power)
     {
         this.power = power;
+    }
+
+
+
+    
+    public override void ToTreeAttributes(ITreeAttribute tree)
+    {
+        base.ToTreeAttributes(tree);
+        tree.SetFloat(PowerKey, power);
+    }
+
+    public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldAccessForResolve)
+    {
+        base.FromTreeAttributes(tree, worldAccessForResolve);
+        power = tree.GetFloat(PowerKey);
     }
 }

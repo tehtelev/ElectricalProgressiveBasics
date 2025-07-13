@@ -234,6 +234,11 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     {
         base.GetBlockInfo(forPlayer, stringBuilder);
 
+
+        if (Api is not ICoreClientAPI)
+            return;
+
+
         //храним направления проводов в этом блоке
         var selectedFacing = Facing.None;
 
@@ -305,6 +310,9 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
 
 
+
+        
+        
 
         // получаем информацию о сети
         var networkInformation = this.System?.GetNetworks(this.Blockentity.Pos, selectedFacing, methodForInformation);
