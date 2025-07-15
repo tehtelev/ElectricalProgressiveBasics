@@ -41,6 +41,8 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is not BlockEntityETransformator entity)
             return;
 
+      
+
         if (IsBurned)
             return;
 
@@ -48,6 +50,8 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
         //stringBuilder.AppendLine("└ " + Lang.Get("Power") + ": " + getPower() + " / " + lowVoltage * maxCurrent + " " + Lang.Get("W"));
         stringBuilder.AppendLine("└ " + Lang.Get("Power") + ": " + ((int)getPower()).ToString() + " " + Lang.Get("W"));
         stringBuilder.AppendLine();
+
+        
     }
 
 
@@ -78,7 +82,7 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
 
         }
 
-        Blockentity.MarkDirty(true);
+        
     }
 
 
@@ -94,7 +98,6 @@ public class BEBehaviorETransformator : BlockEntityBehavior, IElectricTransforma
 
 
 
-    
     public override void ToTreeAttributes(ITreeAttribute tree)
     {
         base.ToTreeAttributes(tree);

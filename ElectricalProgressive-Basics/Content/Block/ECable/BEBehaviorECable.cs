@@ -29,13 +29,14 @@ namespace ElectricalProgressive.Content.Block.ECable
         {
             base.GetBlockInfo(forPlayer, stringBuilder);
 
+            
             if (Api.World.BlockAccessor.GetBlockEntity(Blockentity.Pos) is not BlockEntityECable entity)
                 return;
 
 
 
             //stringBuilder.AppendLine("Заглушка");
-            
+
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace ElectricalProgressive.Content.Block.ECable
 
             }
 
-            //Blockentity.MarkDirty(true);
+            
         }
 
 

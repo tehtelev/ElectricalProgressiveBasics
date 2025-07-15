@@ -158,7 +158,7 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
 
 
         LastCapacity = Capacity;
-        this.Blockentity.MarkDirty(true);
+        
     }
 
 
@@ -177,10 +177,11 @@ public class BEBehaviorEAccumulator : BlockEntityBehavior, IElectricAccumulator
     public override void GetBlockInfo(IPlayer forPlayer, StringBuilder stringBuilder)
     {
         base.GetBlockInfo(forPlayer, stringBuilder);
-
+        
         //проверяем не сгорел ли прибор
         if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is not BlockEntityEAccumulator entity)
             return;
+
 
         if (IsBurned)
             return;

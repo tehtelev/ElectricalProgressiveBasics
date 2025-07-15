@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using ElectricalProgressive;
 using ElectricalProgressive.Content.Block;
 using ElectricalProgressive.Content.Block.Termoplastini;
@@ -166,6 +167,8 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
     /// </summary>
     public int heightTermoplastin = 0;
 
+
+
     /// <summary>
     /// Стак дял топлива в генераторе
     /// </summary>
@@ -290,6 +293,19 @@ public class BlockEntityETermoGenerator : BlockEntityGenericTypedContainer, IHea
         string side = Block.Variant["side"];
         int adjustedIndex = ((BlockFacing.FromCode(side)?.HorizontalAngleIndex ?? 1) + 3) & 3;
         return adjustedIndex * 90;
+    }
+
+
+
+    public override void OnReceivedClientPacket(IPlayer fromPlayer, int packetid, byte[] data)
+    {
+        base.OnReceivedClientPacket(fromPlayer, packetid, data);
+    }
+
+
+    public override void OnReceivedServerPacket(int packetid, byte[] data)
+    {
+        base.OnReceivedServerPacket(packetid, data);
     }
 
 

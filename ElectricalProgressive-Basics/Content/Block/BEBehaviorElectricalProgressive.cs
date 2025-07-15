@@ -10,6 +10,8 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.MathTools;
+using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 using static ElectricalProgressive.Content.Block.ECable.BlockECable;
 
@@ -20,6 +22,7 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     public const string InterruptionKey = "electricalprogressive:interruption";
     public const string ConnectionKey = "electricalprogressive:connection";
     public const string IsLoadedKey = "electricalprogressive:isloaded";
+
 
     private IElectricAccumulator? accumulator;
     private IElectricConsumer? consumer;
@@ -45,6 +48,8 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     {
 
     }
+
+    public const int MyPacketIdForServer = 1122334455; // Уникальный идентификатор пакета для передачи данных BEBehaviorElectricalProgressive
 
     public global::ElectricalProgressive.ElectricalProgressive? System =>
         this.Api?.ModLoader.GetModSystem<global::ElectricalProgressive.ElectricalProgressive>();
@@ -113,6 +118,11 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     }
 
 
+    private bool serverSendNetworkInformation = false;
+    private bool clientWaitNetworkInformation = false;
+    private NetworkInformation? networkInformation=new();
+    private static DateTime lastExecution = DateTime.MinValue;
+    private static readonly double intervalSeconds = 1; // 1 секунда
 
 
     /// <summary>
@@ -225,6 +235,24 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         this.Update();          // обновляем систему, чтобы она знала, что блок выгрузился
     }
 
+ 
+
+    // Принимает сигнал от клиента, который наводится на блок, что инициирует обновление информации о блоке-энтити
+    public override void OnReceivedClientPacket(IPlayer fromPlayer, int packetid, byte[] data)
+    {
+        if (packetid == MyPacketIdForServer) // проверяем, что пакет именно мой
+        {
+            var dataTuple = SerializerUtil.Deserialize<(BlockPos, Facing, string)>(data);
+            networkInformation = this.System?.GetNetworks(dataTuple.Item1, dataTuple.Item2, dataTuple.Item3);
+            serverSendNetworkInformation = true;
+            Blockentity.MarkDirty();
+        }
+
+        base.OnReceivedClientPacket(fromPlayer, packetid, data);
+
+    }
+
+
 
 
     /// <summary>
@@ -235,8 +263,12 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
         base.GetBlockInfo(forPlayer, stringBuilder);
 
 
+
         if (Api is not ICoreClientAPI)
             return;
+
+
+        
 
 
         //храним направления проводов в этом блоке
@@ -311,11 +343,17 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
 
 
-        
-        
 
-        // получаем информацию о сети
-        var networkInformation = this.System?.GetNetworks(this.Blockentity.Pos, selectedFacing, methodForInformation);
+
+
+        // получаем информацию о сети раз в секунду!
+        if ((DateTime.Now - lastExecution).TotalSeconds >= intervalSeconds)
+        {
+            lastExecution = DateTime.Now;
+            ((ICoreClientAPI)Api).Network.SendBlockEntityPacket<(BlockPos, Facing, string)>(Pos, MyPacketIdForServer,
+                (this.Blockentity.Pos, selectedFacing, methodForInformation));
+            clientWaitNetworkInformation = true;
+        }
 
         // если нет информации о сети, то просто выходим
         if (networkInformation is null)
@@ -382,10 +420,17 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
 
         // Используем пользовательскую бинарную сериализацию
         tree.SetBytes(BlockEntityEBase.AllEparamsKey, EParamsSerializer.Serialize(this.allEparams));
+
+        if (serverSendNetworkInformation)
+        {
+            tree.SetBytes("NetworkInformation", NetworkInformationSerializer.Serialize(networkInformation));
+            serverSendNetworkInformation = false;
+        }
+
     }
 
 
-
+    
 
     /// <summary>
     /// Считывает из дерева атрибутов
@@ -415,6 +460,24 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
             // Используем Newtonsoft.Json для старых данных
             AllEparamss = JsonConvert.DeserializeObject<EParams[]>(Encoding.UTF8.GetString(tree.GetBytes(BlockEntityEBase.AllEparamsKey)));
         }
+
+        if (clientWaitNetworkInformation)
+        {
+            try
+            {
+                networkInformation =
+                    NetworkInformationSerializer.Deserialize(tree.GetBytes("NetworkInformation"));
+
+                clientWaitNetworkInformation = false; // сбрасываем флаг ожидания
+            }
+            catch
+            {
+
+            }
+
+        }
+
+
 
         // Проверяем, изменились ли данные
         if (connection == this.connection &&

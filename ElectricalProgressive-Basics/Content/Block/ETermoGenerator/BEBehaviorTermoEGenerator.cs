@@ -12,15 +12,15 @@ namespace ElectricalProgressive.Content.Block.ETermoGenerator;
 
 public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
 {
-    protected float PowerOrder;           // Просят столько энергии (сохраняется)
+    private float PowerOrder;           // Просят столько энергии (сохраняется)
     public const string PowerOrderKey = "electricalprogressive:powerOrder";
 
-    protected float PowerGive;           // Отдаем столько энергии (сохраняется)
+    private float PowerGive;           // Отдаем столько энергии (сохраняется)
     public const string PowerGiveKey = "electricalprogressive:powerGive";
 
 
-    //protected bool IsBurned => Block.Variant["type"] == "burned";
-    protected bool IsBurned => false;
+
+    private bool IsBurned => false;
 
     
 
@@ -32,23 +32,6 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
 
     }
 
-    /// <summary>
-    /// Инициализация поведения блока
-    /// </summary>
-    /// <param name="api"></param>
-    /// <param name="properties"></param>
-    public override void Initialize(ICoreAPI api, JsonObject properties)
-    {
-        base.Initialize(api, properties);
-    }
-
-    /// <summary>
-    /// Вызывается при выгрузке блока из мира
-    /// </summary>
-    public override void OnBlockUnloaded()
-    {
-        base.OnBlockUnloaded();
-    }
 
 
 
@@ -147,6 +130,7 @@ public class BEBehaviorTermoEGenerator : BlockEntityBehavior, IElectricProducer
         tree.SetFloat(PowerOrderKey, PowerOrder);
         tree.SetFloat(PowerGiveKey, PowerGive);
     }
+
 
 
     /// <summary>

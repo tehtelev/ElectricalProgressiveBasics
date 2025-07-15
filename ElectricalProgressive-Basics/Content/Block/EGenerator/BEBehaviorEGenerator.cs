@@ -14,52 +14,54 @@ namespace ElectricalProgressive.Content.Block.EGenerator;
 
 public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
 {
-    protected float PowerOrder;           // Просят столько энергии (сохраняется)
+    private float PowerOrder;           // Просят столько энергии (сохраняется)
     public const string PowerOrderKey = "electricalprogressive:powerOrder";
 
-    protected float PowerGive;           // Отдаем столько энергии (сохраняется)
+    private float PowerGive;           // Отдаем столько энергии (сохраняется)
     public const string PowerGiveKey = "electricalprogressive:powerGive";
+
+
 
     /// <summary>
     /// Максимальный ток
     /// </summary>
-    protected float I_max;
+    private float I_max;
     /// <summary>
     /// Максимальная скорость вращения
     /// </summary>
-    protected float speed_max;
+    private float speed_max;
     /// <summary>
     /// Множитель сопротивления
     /// </summary>
-    protected float resistance_factor;
+    private float resistance_factor;
     /// <summary>
     /// Сопротивление нагрузки генератора
     /// </summary>
-    protected float resistance_load;
+    private float resistance_load;
     /// <summary>
     /// Базовое сопротивление
     /// </summary>
-    protected float base_resistance;
+    private float base_resistance;
     /// <summary>
     /// КПД
     /// </summary>
-    protected float kpd_max;
+    private float kpd_max;
 
     /// <summary>
     /// Заглушка. I_max, speed_max , resistance_factor, resistance_load, base_resistance, kpd_max
     /// </summary>
-    protected virtual float[] def_Params => new[] { 100.0F, 0.5F, 0.1F, 0.25F, 0.05F, 1F };
+    private float[] def_Params => new[] { 100.0F, 0.5F, 0.1F, 0.25F, 0.05F, 1F };
     /// <summary>
     /// Сюда берем параметры из ассетов
     /// </summary>
-    protected float[] Params = { 0, 0, 0, 0, 0, 0 };
+    private float[] Params = { 0, 0, 0, 0, 0, 0 };
 
     // задает коэффициент сглаживания фильтра
     public ExponentialMovingAverage EmaFilter;
 
-    protected float AvgPowerOrder;
+    private float AvgPowerOrder;
 
-    protected bool IsBurned => Block.Variant["type"] == "burned";
+    private bool IsBurned => Block.Variant["type"] == "burned";
 
 
     protected CompositeShape? CompositeShape;  //не трогать уровни доступа
@@ -142,7 +144,7 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
     /// <summary>
     /// Извлекаем параметры из ассетов
     /// </summary>  
-    public void GetParams()
+    private void GetParams()
     {
         Params = MyMiniLib.GetAttributeArrayFloat(Block, "params", def_Params);
 
@@ -232,7 +234,7 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
             }
         }
 
-        Blockentity.MarkDirty(true);
+        
     }
 
 
@@ -260,6 +262,8 @@ public class BEBehaviorEGenerator : BEBehaviorMPBase, IElectricProducer
 
         if (Api.World.BlockAccessor.GetBlockEntity(Blockentity.Pos) is not BlockEntityEGenerator entity)
             return;
+
+        
 
         if (IsBurned)
             return;

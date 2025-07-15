@@ -19,35 +19,35 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
     /// <summary>
     /// Нужно энергии (сохраняется)
     /// </summary>
-    protected float powerRequest = I_max;
+    private float powerRequest;
     public const string PowerRequestKey = "electricalprogressive:powerRequest";
 
     /// <summary>
     /// Дали энергии  (сохраняется)
     /// </summary>
-    protected float powerReceive = 0;
+    private float powerReceive;
     public const string PowerReceiveKey = "electricalprogressive:powerReceive";
 
     /// <summary>
     /// Минимальный ток
     /// </summary>
-    private static float I_min;
+    private float I_min;
     /// <summary>
     /// Максимальный ток
     /// </summary>
-    private static float I_max;
+    private float I_max;
     /// <summary>
     /// Максимальный крутящий момент
     /// </summary>
-    private static float torque_max;
+    private float torque_max;
     /// <summary>
     /// Пиковый КПД
     /// </summary>
-    private static float kpd_max;
+    private float kpd_max;
     /// <summary>
     /// Максимальная скорость вращения
     /// </summary>
-    private static float speed_max;
+    private float speed_max;
     /// <summary>
     /// Множитель сопротивления
     /// </summary>
@@ -55,7 +55,7 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
     /// <summary>
     /// Базовое сопротивление
     /// </summary>
-    private static float base_resistance;
+    private float base_resistance;
     /// <summary>
     /// Текущий крутящий момент
     /// </summary>
@@ -67,16 +67,16 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
     /// <summary>
     /// КПД
     /// </summary>
-    public float kpd;
+    private float kpd;
 
     /// <summary>
     /// Заглушка. I_min , I_max, torque_max, kpd_max, speed_max, resistance_factor, base_resistance 
     /// </summary>
-    protected virtual float[] def_Params => new[] { 10.0F, 100.0F, 0.5F, 0.75F, 0.5F, 0.1F, 0.05F };
+    private float[] def_Params => new[] { 10.0F, 100.0F, 0.5F, 0.75F, 0.5F, 0.1F, 0.05F };
     /// <summary>
     /// Сюда берем параметры из ассетов
     /// </summary>
-    public float[] Params = { 0, 0, 0, 0, 0, 0, 0 };
+    private float[] Params = { 0, 0, 0, 0, 0, 0, 0 };
 
 
     private static readonly int[][] _axisSigns = new int[][]
@@ -90,7 +90,7 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
     };
 
 
-    public bool IsBurned => Block.Variant["type"] == "burned";
+    private bool IsBurned => Block.Variant["type"] == "burned";
 
 
 
@@ -149,12 +149,14 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
     public BEBehaviorEMotor(BlockEntity blockentity) : base(blockentity)
     {
         this.GetParams();
+        powerReceive = 0;
+        powerRequest = I_max;
     }
 
     /// <summary>
     /// Извлекаем параметры из ассетов
     /// </summary>
-    public void GetParams()
+    private void GetParams()
     {
         Params = MyMiniLib.GetAttributeArrayFloat(Block, "params", def_Params);
         I_min = Params[0];
@@ -208,7 +210,7 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
             }
         }
 
-        this.Blockentity.MarkDirty(true);
+        
     }
 
     /// <inheritdoc />
@@ -354,6 +356,8 @@ public class BEBehaviorEMotor : BEBehaviorMPBase, IElectricConsumer
         //проверяем не сгорел ли прибор
         if (Api.World.BlockAccessor.GetBlockEntity(Blockentity.Pos) is not BlockEntityEMotor entity)
             return;
+
+      
 
         if (IsBurned)
             return;

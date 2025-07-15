@@ -76,11 +76,13 @@ public class GuiBlockEntityETermoGenerator : GuiDialogBlockEntity
 
             .AddDynamicCustomDraw(stoveBounds, OnBgDraw, "symbolDrawer")
 
-            .AddItemSlotGrid(Inventory, new Action<object>(SendInvPacket), 1, new int[1], fuelGrid, "inputSlot")
+            .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[1], fuelGrid, "inputSlot")
             .AddDynamicText("", outputText, textBounds, "outputText")
             .EndChildElements()
             .Compose(true);
     }
+
+
 
     /// <summary>
     /// Отправка пакета на сервер для обновления инвентаря
@@ -88,8 +90,7 @@ public class GuiBlockEntityETermoGenerator : GuiDialogBlockEntity
     /// <param name="packet"></param>
     private void SendInvPacket(object packet)
     {
-        this.capi.Network.SendBlockEntityPacket(BlockEntityPosition.X, BlockEntityPosition.Y, BlockEntityPosition.Z,
-            packet);
+        this.capi.Network.SendBlockEntityPacket(BlockEntityPosition.X, BlockEntityPosition.Y, BlockEntityPosition.Z, packet);
     }
 
 

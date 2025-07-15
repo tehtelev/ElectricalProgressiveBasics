@@ -1,4 +1,5 @@
-﻿using ElectricalProgressive.Content.Block.EGenerator;
+﻿using ElectricalProgressive.Content.Block.EAccumulator;
+using ElectricalProgressive.Content.Block.EGenerator;
 using ElectricalProgressive.Content.Block.ETermoGenerator;
 using ElectricalProgressive.Interface;
 using ElectricalProgressive.Utils;
@@ -30,9 +31,18 @@ namespace ElectricalProgressive.Content.Block.EConnector
         /// <exception cref="NotImplementedException"></exception>
         public void Update()
         {
-           // Blockentity.MarkDirty(true);
+            // Blockentity.MarkDirty();
         }
 
 
+        public override void GetBlockInfo(IPlayer forPlayer, StringBuilder dsc)
+        {
+            base.GetBlockInfo(forPlayer, dsc);
+
+            if (this.Api.World.BlockAccessor.GetBlockEntity(this.Blockentity.Pos) is not BlockEntityEConnector entity)
+                return;
+
+           
+        }
     }
 }
