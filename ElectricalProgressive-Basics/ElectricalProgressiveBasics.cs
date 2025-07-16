@@ -17,13 +17,13 @@ using System.Collections.Generic;
 
 
 [assembly: ModDependency("game", "1.20.0")]
-[assembly: ModDependency("electricalprogressivecore", "1.1.0")]
+[assembly: ModDependency("electricalprogressivecore", "2.0.0-rc.1")]
 [assembly: ModInfo(
     "Electrical Progressive: Basics",
     "electricalprogressivebasics",
     Website = "https://github.com/tehtelev/ElectricalProgressiveBasics",
     Description = "Basic electrical devices.",
-    Version = "1.1.0",
+    Version = "2.0.0-rc.1",
     Authors = new[] {
         "Tehtelev",
         "Kotl"
@@ -31,10 +31,6 @@ using System.Collections.Generic;
 )]
 
 namespace ElectricalProgressive;
-
-
-
-
 
 
 public class ElectricalProgressiveBasics : ModSystem

@@ -28,7 +28,7 @@ public abstract class BlockEntityEFacingBase : BlockEntityEBase
     /// <summary>
     /// Позволяет переопределить устанавливаемое в <see cref="Facing"/> значение
     /// </summary>
-    protected virtual Facing GetConnection(Facing value)
+    public virtual Facing GetConnection(Facing value)
     {
         return value;
     }

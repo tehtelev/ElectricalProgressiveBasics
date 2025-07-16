@@ -8,7 +8,7 @@ namespace ElectricalProgressive.Content.Block.EGenerator;
 
 public class BlockEntityEGenerator : BlockEntityEFacingBase
 {
-    protected override Facing GetConnection(Facing value)
+    public override Facing GetConnection(Facing value)
     {
         return FacingHelper.FullFace(value);
     }
