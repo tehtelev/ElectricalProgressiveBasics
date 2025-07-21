@@ -246,12 +246,12 @@ public class BEBehaviorElectricalProgressive : BlockEntityBehavior
     {
         if (packetid == MyPacketIdForServer) // проверяем, что пакет именно мой
         {
-
             var dataTuple = SerializerUtil.Deserialize<(BlockPos, Facing, string)>(data);
             networkInformation = this.System?.GetNetworks(dataTuple.Item1, dataTuple.Item2, dataTuple.Item3);
             var sapi= (ICoreServerAPI)Api;
             IServerPlayer fromServerPlayer = fromPlayer as IServerPlayer;
             sapi.Network.SendBlockEntityPacket(fromServerPlayer,this.Blockentity.Pos, MyPacketIdForClient, NetworkInformationSerializer.Serialize(networkInformation));
+            this.Blockentity.MarkDirty();
         }
 
         base.OnReceivedClientPacket(fromPlayer, packetid, data);
